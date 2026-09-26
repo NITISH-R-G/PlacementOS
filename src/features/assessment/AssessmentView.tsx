@@ -3,18 +3,15 @@ import {
   FileCheck2,
   CheckCircle2,
   AlertCircle,
-  ArrowRight,
-  RotateCcw,
-  Sparkles,
 } from 'lucide-react'
 import { DIAGNOSTIC_QUESTIONS } from '@/data/diagnosticQuestions'
 import { usePlacementStore } from '@/store/usePlacementStore'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
 export const AssessmentView: React.FC = () => {
-  const { diagnosticResult, completeOnboarding, profile, setActiveTab } = usePlacementStore()
+  const { completeOnboarding, profile, setActiveTab } = usePlacementStore()
 
   const [currentIdx, setCurrentIdx] = useState(0)
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({})

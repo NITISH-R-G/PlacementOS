@@ -36,7 +36,7 @@ export const OnboardingFlow: React.FC = () => {
   const [college, setCollege] = useState('Chennai Institute of Technology')
   const [degree, setDegree] = useState('B.E. Computer Science')
   const [currentYear, setCurrentYear] = useState('3rd Year (6th Sem)')
-  const [targetGraduationYear, setTargetGraduationYear] = useState(2026)
+  const [targetGraduationYear] = useState(2026)
   const [targetRole, setTargetRole] = useState<TargetRole>('software_engineer')
   const [currentSkillLevel, setCurrentSkillLevel] = useState<SkillLevel>('intermediate')
   const [availableHoursPerDay, setAvailableHoursPerDay] = useState(2.5)

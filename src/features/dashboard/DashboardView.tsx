@@ -5,13 +5,9 @@ import {
   Clock,
   CheckCircle2,
   AlertTriangle,
-  ArrowRight,
   Flame,
-  Play,
-  RotateCcw,
   Target,
   ExternalLink,
-  BookOpen,
 } from 'lucide-react'
 import { usePlacementStore } from '@/store/usePlacementStore'
 import { Button } from '@/components/ui/button'
@@ -237,7 +233,7 @@ export const DashboardView: React.FC = () => {
                             <a
                               href={action.resource.sourceUrl}
                               target="_blank"
-                              rel="noreferrer"
+                              rel="noopener noreferrer"
                               className="p-1.5 rounded-lg border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors"
                               title="Open original open-source reference"
                             >

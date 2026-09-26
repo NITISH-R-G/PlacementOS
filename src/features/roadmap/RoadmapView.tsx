@@ -2,16 +2,11 @@ import React from 'react'
 import {
   MapPin,
   CheckCircle2,
-  Clock,
   Calendar,
-  AlertCircle,
-  Flag,
-  ArrowRight,
 } from 'lucide-react'
 import { usePlacementStore } from '@/store/usePlacementStore'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
 import { Button } from '@/components/ui/button'
 
 export const RoadmapView: React.FC = () => {

@@ -2,9 +2,7 @@ import React, { useState } from 'react'
 import {
   Library,
   ExternalLink,
-  CheckCircle2,
   Search,
-  Filter,
   Info,
 } from 'lucide-react'
 import { usePlacementStore } from '@/store/usePlacementStore'
@@ -62,6 +60,7 @@ export const ResourcesView: React.FC = () => {
           <Search className="w-4 h-4 text-zinc-500 absolute left-3 top-3" />
           <input
             type="text"
+            aria-label="Search resources"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search topics, skills (e.g. Sliding Window, Mutex, Normalization)..."
@@ -70,6 +69,7 @@ export const ResourcesView: React.FC = () => {
         </div>
 
         <select
+          aria-label="Filter by resource source"
           value={selectedSource}
           onChange={(e) => setSelectedSource(e.target.value)}
           className="bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-xs text-zinc-200 focus:outline-none focus:border-indigo-500"
@@ -83,6 +83,20 @@ export const ResourcesView: React.FC = () => {
       </div>
 
       {/* Resource Grid */}
+      {filtered.length === 0 ? (
+        <div className="p-12 text-center border border-dashed border-zinc-800 rounded-xl bg-zinc-950/40 space-y-3">
+          <p className="text-sm font-medium text-zinc-300">No matching learning resources found</p>
+          <p className="text-xs text-zinc-500 max-w-sm mx-auto">
+            Try adjusting your search keywords or reset the source filter to view accredited placement materials.
+          </p>
+          <button
+            onClick={() => { setSearchTerm(''); setSelectedSource('all'); }}
+            className="text-xs text-indigo-400 hover:text-indigo-300 underline font-medium"
+          >
+            Clear Filters
+          </button>
+        </div>
+      ) : (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filtered.map((res) => {
           const isDone = completedResourceIds.includes(res.id)
@@ -135,7 +149,7 @@ export const ResourcesView: React.FC = () => {
                       <a
                         href={res.sourceUrl}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="p-1 rounded text-zinc-400 hover:text-white"
                         title="View Source Link"
                       >
@@ -157,6 +171,7 @@ export const ResourcesView: React.FC = () => {
           )
         })}
       </div>
+      )}
     </div>
   )
 }

@@ -4,15 +4,11 @@ import {
   CheckCircle2,
   Sparkles,
   ExternalLink,
-  BookOpen,
-  Filter,
   Send,
-  MessageSquare,
-  Flame,
 } from 'lucide-react'
 import { usePlacementStore } from '@/store/usePlacementStore'
 import { INITIAL_RESOURCES } from '@/data/resources'
-import { SkillDimensionKey, LearningResource } from '@/types'
+import { LearningResource } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -172,7 +168,7 @@ export const PracticeView: React.FC = () => {
                     <a
                       href={activeDrill.sourceUrl}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="text-xs text-indigo-400 hover:underline flex items-center gap-1"
                     >
                       Reference Source <ExternalLink className="w-3 h-3" />
@@ -198,6 +194,7 @@ export const PracticeView: React.FC = () => {
                     </span>
                   </div>
                   <textarea
+                    aria-label="Your Solution, Approach, or Code Submission"
                     rows={6}
                     value={studentAnswer}
                     onChange={(e) => setStudentAnswer(e.target.value)}

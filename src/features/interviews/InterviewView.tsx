@@ -3,11 +3,6 @@ import {
   MessageSquareCode,
   Sparkles,
   Send,
-  CheckCircle2,
-  HelpCircle,
-  Award,
-  Video,
-  Mic,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -140,6 +135,7 @@ export const InterviewView: React.FC = () => {
                   Your Answer (Draft or Transcript):
                 </label>
                 <textarea
+                  aria-label="Your Answer draft or transcript"
                   rows={7}
                   value={response}
                   onChange={(e) => setResponse(e.target.value)}

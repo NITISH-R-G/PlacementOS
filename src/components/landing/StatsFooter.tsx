@@ -50,8 +50,18 @@ function easeOutCubic(x: number): number {
 
 export const StatsFooter: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [hasTriggered, setHasTriggered] = useState(false)
-  const [counts, setCounts] = useState<number[]>([0, 0, 0, 0])
+  const [hasTriggered, setHasTriggered] = useState<boolean>(() => {
+    if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches) {
+      return true
+    }
+    return false
+  })
+  const [counts, setCounts] = useState<number[]>(() => {
+    if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches) {
+      return METRICS.map((m) => m.target)
+    }
+    return [0, 0, 0, 0]
+  })
 
   useEffect(() => {
     // Check reduced motion
@@ -60,8 +70,6 @@ export const StatsFooter: React.FC = () => {
     ).matches
 
     if (prefersReducedMotion) {
-      setCounts(METRICS.map((m) => m.target))
-      setHasTriggered(true)
       return
     }
 
@@ -90,7 +98,6 @@ export const StatsFooter: React.FC = () => {
       '(prefers-reduced-motion: reduce)'
     ).matches
     if (prefersReducedMotion) {
-      setCounts(METRICS.map((m) => m.target))
       return
     }
 

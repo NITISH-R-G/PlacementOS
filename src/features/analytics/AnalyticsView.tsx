@@ -4,7 +4,6 @@ import {
   TrendingUp,
   Clock,
   CheckCircle2,
-  Calendar,
   Flame,
 } from 'lucide-react'
 import {
@@ -19,11 +18,10 @@ import {
 } from 'recharts'
 import { usePlacementStore } from '@/store/usePlacementStore'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { SkillDimensionKey } from '@/types'
 
 export const AnalyticsView: React.FC = () => {
-  const { recommendationOutput, streakDays, totalHoursStudied, completedResourceIds, profile } =
+  const { recommendationOutput, streakDays, totalHoursStudied, completedResourceIds } =
     usePlacementStore()
   const { readinessProfile, overallScore } = recommendationOutput
 

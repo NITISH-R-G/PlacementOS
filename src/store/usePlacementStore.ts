@@ -4,8 +4,7 @@ import {
   SkillDimensionKey,
   DiagnosticResult,
   RecommendationEngineOutput,
-  TargetRole,
-} from '../types'
+  } from '../types'
 import { generatePersonalizedPlan } from '../lib/recommendationEngine'
 import { INITIAL_RESOURCES } from '../data/resources'
 

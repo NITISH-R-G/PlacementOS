@@ -109,7 +109,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
               </button>
 
               {/* Navigation Items (Desktop) */}
-              <nav className="hidden lg:flex items-center space-x-1 pl-4 border-l border-zinc-800/80">
+              <nav aria-label="Main Navigation" className="hidden lg:flex items-center space-x-1 pl-4 border-l border-zinc-800/80">
                 {navItems.map((item) => {
                   const Icon = item.icon
                   const isActive = activeTab === item.id
@@ -177,7 +177,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           </div>
 
           {/* Mobile Navigation Row */}
-          <div className="lg:hidden flex items-center space-x-1 overflow-x-auto py-2 border-t border-zinc-800/50 scrollbar-none">
+          <nav aria-label="Mobile Navigation" className="lg:hidden flex items-center space-x-1 overflow-x-auto py-2 border-t border-zinc-800/50 scrollbar-none">
             {navItems.map((item) => (
               <button
                 key={item.id}
@@ -191,8 +191,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                 {item.label}
               </button>
             ))}
+          </nav>
           </div>
-        </div>
       </header>
 
       {/* Main Content Area */}
