@@ -1,16 +1,17 @@
 import React from 'react'
 import {
-  Sparkles,
   LayoutDashboard,
   Map,
   Code2,
   Library,
-  FileCheck2,
   BarChart3,
-  MessageSquareCode,
-  Flame,
+  FileCheck2,
   Clock,
+  Sparkles,
+  Flame,
   RotateCcw,
+  MessageSquareCode,
+  Home,
 } from 'lucide-react'
 import { usePlacementStore } from '@/store/usePlacementStore'
 import { Badge } from '@/components/ui/badge'
@@ -22,36 +23,42 @@ interface AppShellProps {
 
 export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const {
+    profile,
     activeTab,
     setActiveTab,
-    profile,
     streakDays,
-    resetToFreshOnboarding,
     loadDemoProfile,
+    resetToFreshOnboarding,
   } = usePlacementStore()
 
   const navItems = [
+    { id: 'landing', label: 'Home', icon: Home },
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'roadmap', label: 'Roadmap', icon: Map },
     { id: 'practice', label: 'Practice Lab', icon: Code2 },
-    { id: 'assessment', label: 'Diagnostic', icon: FileCheck2 },
     { id: 'interview', label: 'Mock Interview', icon: MessageSquareCode },
     { id: 'resources', label: 'Resources', icon: Library },
     { id: 'analytics', label: 'Readiness Analytics', icon: BarChart3 },
+    { id: 'assessment', label: 'Diagnostic', icon: FileCheck2 },
   ]
 
   const formatRole = (role: string) => {
-    return role
-      .split('_')
-      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(' ')
+    return role.split('_').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-black text-zinc-100">
-      {/* Top Banner: Minimalist high-contrast announcement */}
-      <div className="border-b border-white/[0.08] bg-zinc-950/80 px-4 py-1.5 text-xs text-zinc-300 flex items-center justify-between backdrop-blur-md">
-        <div className="flex items-center gap-2 mx-auto sm:mx-0">
+    <div className="min-h-screen bg-[#050608] text-zinc-100 flex flex-col font-sans selection:bg-white/20 selection:text-white">
+      {/* Skip to Content Link (Accessibility / Jakob's Law convention) */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:px-3 focus:py-1.5 focus:bg-white focus:text-black focus:font-semibold focus:text-xs focus:rounded-md focus:shadow-xl"
+      >
+        Skip to main content
+      </a>
+
+      {/* Top System Status Bar */}
+      <div className="border-b border-white/[0.06] bg-zinc-950/90 text-xs text-zinc-300 py-1.5 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div className="flex items-center gap-2">
           <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
           <span className="font-semibold tracking-wide text-white font-mono text-[11px]">AI PLACEMENT OS:</span>
           <span className="hidden sm:inline text-zinc-400">
@@ -66,7 +73,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                 resetToFreshOnboarding()
               }
             }}
-            className="text-xs text-zinc-400 hover:text-white flex items-center gap-1 transition-colors"
+            className="text-xs text-zinc-400 hover:text-white flex items-center gap-1 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40 rounded px-1"
             title="Start from scratch with onboarding diagnostic"
           >
             <RotateCcw className="w-3 h-3" />
@@ -75,7 +82,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           <span className="text-zinc-700">|</span>
           <button
             onClick={loadDemoProfile}
-            className="text-xs text-zinc-300 hover:text-white font-medium transition-colors"
+            className="text-xs text-zinc-300 hover:text-white font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40 rounded px-1"
           >
             Load Demo Profile
           </button>
@@ -90,7 +97,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
             <div className="flex items-center gap-6">
               <button
                 onClick={() => setActiveTab('landing')}
-                className="flex items-center gap-2.5 group text-left"
+                className="flex items-center gap-2.5 group text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded-lg p-1"
               >
                 <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-lg shadow-white/10 group-hover:scale-105 transition-transform">
                   <Sparkles className="w-4 h-4 text-black" />
@@ -120,7 +127,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                       <button
                         key={item.id}
                         onClick={() => setActiveTab(item.id)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                        aria-current={isActive ? 'page' : undefined}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${
                           isActive
                             ? 'bg-white text-black font-semibold shadow-sm'
                             : 'text-zinc-400 hover:text-white hover:bg-zinc-800/60'
@@ -138,7 +146,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
             {/* Student Context & Metrics Pills */}
             <div className="flex items-center gap-3">
               {/* Placement Countdown Pill */}
-              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-900/90 border border-white/[0.08] text-xs text-zinc-300">
+              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-900/90 border border-white/[0.08] text-xs text-zinc-300" title="Days remaining until placement assessments">
                 <Clock className="w-3.5 h-3.5 text-zinc-300" />
                 <span>
                   <strong className="text-white font-semibold">{profile.daysUntilPlacement}</strong> days left
@@ -146,7 +154,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
               </div>
 
               {/* Streak Pill */}
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-xs text-amber-300">
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-xs text-amber-300" title="Consecutive daily study streak">
                 <Flame className="w-3.5 h-3.5 text-amber-400 fill-amber-400/30" />
                 <span className="font-semibold font-mono">{streakDays}d</span>
                 <span className="hidden md:inline text-amber-400/80">streak</span>
@@ -181,26 +189,31 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           </div>
 
           {/* Mobile Navigation Row */}
-          <nav aria-label="Mobile Navigation" className="lg:hidden flex items-center space-x-1 overflow-x-auto py-2 border-t border-white/[0.06] scrollbar-none">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                className={`whitespace-nowrap px-3 py-1 rounded-full text-xs flex items-center gap-1 transition-all ${
-                  activeTab === item.id || (item.id === 'interview' && activeTab === 'interviews')
-                    ? 'bg-white text-black font-semibold'
-                    : 'text-zinc-400 hover:text-zinc-200'
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
+          <nav aria-label="Mobile Navigation" className="lg:hidden flex items-center space-x-1.5 overflow-x-auto py-2.5 border-t border-white/[0.06] scrollbar-none">
+            {navItems.map((item) => {
+              const isActive = activeTab === item.id || (item.id === 'interview' && activeTab === 'interviews')
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id)}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`whitespace-nowrap px-3.5 py-1.5 min-h-[36px] rounded-full text-xs flex items-center gap-1.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${
+                    isActive
+                      ? 'bg-white text-black font-semibold shadow-sm'
+                      : 'text-zinc-400 hover:text-zinc-200 bg-zinc-900/40 border border-white/[0.04]'
+                  }`}
+                >
+                  <item.icon className="w-3 h-3" />
+                  {item.label}
+                </button>
+              )
+            })}
           </nav>
         </div>
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main id="main-content" className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 focus:outline-none">
         {children}
       </main>
 
@@ -217,7 +230,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
             <span>•</span>
             <button
               onClick={() => setActiveTab('resources')}
-              className="hover:text-white transition-colors underline underline-offset-2"
+              className="hover:text-white transition-colors underline underline-offset-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40 rounded"
             >
               View Catalog
             </button>

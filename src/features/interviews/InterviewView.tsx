@@ -3,6 +3,9 @@ import {
   MessageSquareCode,
   Sparkles,
   Send,
+  FileText,
+  RotateCcw,
+  CheckCircle2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -41,8 +44,10 @@ export const InterviewView: React.FC = () => {
     keyImprovement: string
   } | null>(null)
 
+  const wordCount = response.trim() ? response.trim().split(/\s+/).length : 0
+
   const handleEvaluate = () => {
-    if (!response.trim()) return
+    if (!response.trim() || isEvaluating) return
     setIsEvaluating(true)
     setTimeout(() => {
       setIsEvaluating(false)
@@ -56,6 +61,11 @@ export const InterviewView: React.FC = () => {
           'Quantify the final Result more aggressively: Mention percentage reduction in latency, lines saved, or team velocity increase.',
       })
     }, 1000)
+  }
+
+  const handleInsertTemplate = () => {
+    const template = `Situation:\nIn my recent team project, we faced...\n\nTask:\nMy specific responsibility was to resolve...\n\nAction:\nI designed a benchmark suite to objectively test both implementations...\n\nResult:\nThe data proved our approach reduced query response time by 42% and saved 12 hours of debugging.\n`
+    setResponse(template)
   }
 
   return (
@@ -73,15 +83,23 @@ export const InterviewView: React.FC = () => {
             Rehearse behavioral STAR stories and technical communication rubrics with simulated interviewer scoring.
           </p>
         </div>
+
+        <div className="flex items-center gap-2">
+          <Badge variant="cyan" className="font-mono text-xs px-2.5 py-1">
+            STAR Method Guided
+          </Badge>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left: Questions selector (4 cols) */}
         <div className="lg:col-span-4 space-y-3">
-          <div className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1 px-1">
-            High-Frequency Behavioral Prompts
+          <div className="flex items-center justify-between text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1 px-1">
+            <span>High-Frequency Behavioral Prompts</span>
+            <span className="font-mono text-[10px] text-zinc-500">{STAR_QUESTIONS.length} Prompts</span>
           </div>
-          {STAR_QUESTIONS.map((q) => {
+
+          {STAR_QUESTIONS.map((q, idx) => {
             const isSelected = activeQ.id === q.id
             return (
               <div
@@ -91,15 +109,27 @@ export const InterviewView: React.FC = () => {
                   setEvaluation(null)
                   setResponse('')
                 }}
-                className={`p-3.5 rounded-xl border cursor-pointer transition-all duration-200 ${
+                tabIndex={0}
+                role="button"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    setActiveQ(q)
+                    setEvaluation(null)
+                    setResponse('')
+                  }
+                }}
+                className={`p-3.5 rounded-xl border cursor-pointer transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${
                   isSelected
                     ? 'border-white/[0.3] bg-[#12131a] shadow-lg shadow-black/40'
                     : 'border-white/[0.06] bg-[#0c0d12]/80 hover:border-white/[0.14] hover:bg-[#0f1017]'
                 }`}
               >
-                <Badge variant="secondary" className="text-[10px] mb-1.5 font-mono uppercase bg-zinc-900 text-zinc-300 border-white/[0.06]">
-                  {q.category}
-                </Badge>
+                <div className="flex items-center justify-between mb-1.5">
+                  <Badge variant="secondary" className="text-[10px] font-mono uppercase bg-zinc-900 text-zinc-300 border-white/[0.06]">
+                    {q.category}
+                  </Badge>
+                  <span className="text-[10px] font-mono text-zinc-500">#{idx + 1}</span>
+                </div>
                 <h4 className="text-xs font-semibold text-zinc-100 leading-snug">
                   {q.question}
                 </h4>
@@ -107,13 +137,29 @@ export const InterviewView: React.FC = () => {
             )
           })}
 
-          <div className="p-4 rounded-xl bg-zinc-950/80 border border-white/[0.08] text-xs space-y-2 mt-4 shadow-sm">
-            <span className="font-semibold text-white block">The STAR Rubric:</span>
-            <ul className="text-zinc-400 space-y-1.5 text-[11px] list-disc list-inside">
-              <li><strong className="text-zinc-200">S</strong>ituation: 20s context</li>
-              <li><strong className="text-zinc-200">T</strong>ask: 15s challenge</li>
-              <li><strong className="text-zinc-200">A</strong>ction: 60s what YOU did</li>
-              <li><strong className="text-zinc-200">R</strong>esult: 25s quantifiable metrics</li>
+          {/* Familiar STAR Structure Guidance Card */}
+          <div className="p-4 rounded-xl bg-zinc-950/80 border border-white/[0.08] text-xs space-y-2.5 mt-4 shadow-sm">
+            <span className="font-semibold text-white flex items-center gap-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+              The STAR Rubric:
+            </span>
+            <ul className="text-zinc-400 space-y-1.5 text-[11px]">
+              <li className="flex items-start gap-1.5">
+                <strong className="text-emerald-400 font-mono">S</strong>
+                <span><strong className="text-zinc-200">Situation:</strong> Set the context & problem (20s)</span>
+              </li>
+              <li className="flex items-start gap-1.5">
+                <strong className="text-cyan-400 font-mono">T</strong>
+                <span><strong className="text-zinc-200">Task:</strong> State the core challenge & goal (15s)</span>
+              </li>
+              <li className="flex items-start gap-1.5">
+                <strong className="text-indigo-400 font-mono">A</strong>
+                <span><strong className="text-zinc-200">Action:</strong> What specific decisions YOU made (60s)</span>
+              </li>
+              <li className="flex items-start gap-1.5">
+                <strong className="text-amber-400 font-mono">R</strong>
+                <span><strong className="text-zinc-200">Result:</strong> Quantifiable business impact (25s)</span>
+              </li>
             </ul>
           </div>
         </div>
@@ -122,9 +168,14 @@ export const InterviewView: React.FC = () => {
         <div className="lg:col-span-8 space-y-6">
           <Card className="border-white/[0.08] bg-[#0c0d12]/90 shadow-2xl backdrop-blur-xl">
             <CardHeader className="pb-3 border-b border-white/[0.06]">
-              <Badge variant="default" className="text-xs w-fit font-mono">
-                {activeQ.category}
-              </Badge>
+              <div className="flex items-center justify-between">
+                <Badge variant="default" className="text-xs font-mono">
+                  {activeQ.category}
+                </Badge>
+                <span className="text-[11px] text-zinc-400 font-mono">
+                  Behavioral Interview Simulator
+                </span>
+              </div>
               <CardTitle className="text-lg text-white mt-2 font-bold tracking-tight">
                 {activeQ.question}
               </CardTitle>
@@ -134,29 +185,63 @@ export const InterviewView: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-4 pt-4">
               <div>
-                <label className="text-xs font-semibold text-zinc-200 mb-1.5 block">
-                  Your Answer (Draft or Transcript):
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-xs font-semibold text-zinc-200 block">
+                    Your Answer (Draft or Transcript):
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={handleInsertTemplate}
+                      className="text-[11px] text-zinc-400 hover:text-zinc-200 flex items-center gap-1 transition-colors"
+                      title="Insert standard STAR template"
+                    >
+                      <FileText className="w-3 h-3" />
+                      STAR Scaffold
+                    </button>
+                    <span className="text-zinc-600">|</span>
+                    <button
+                      type="button"
+                      onClick={() => { setResponse(''); setEvaluation(null); }}
+                      className="text-[11px] text-zinc-400 hover:text-zinc-200 flex items-center gap-1 transition-colors"
+                      title="Clear answer"
+                    >
+                      <RotateCcw className="w-3 h-3" />
+                      Clear
+                    </button>
+                  </div>
+                </div>
+
                 <textarea
                   aria-label="Your Answer draft or transcript"
-                  rows={7}
+                  rows={8}
                   value={response}
                   onChange={(e) => setResponse(e.target.value)}
+                  onKeyDown={(e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                      e.preventDefault()
+                      handleEvaluate()
+                    }
+                  }}
                   placeholder="Structure your answer using STAR: In my 3rd semester project, our team had conflicting views on database schema... I proposed running a benchmark comparing query throughput... We documented the result and aligned..."
-                  className="w-full bg-zinc-950/90 border border-white/[0.1] rounded-xl p-3 text-xs text-zinc-100 font-mono focus:outline-none focus:border-white/[0.3] placeholder:text-zinc-600 transition-colors"
+                  className="w-full bg-zinc-950/90 border border-white/[0.1] rounded-xl p-3 text-xs text-zinc-100 font-mono focus:outline-none focus:border-white/[0.3] focus:ring-1 focus:ring-white/20 placeholder:text-zinc-600 transition-colors leading-relaxed"
                 />
+
+                <div className="flex justify-between items-center text-[11px] text-zinc-400 mt-1 px-1">
+                  <span className={wordCount >= 100 && wordCount <= 350 ? 'text-emerald-400 font-medium' : 'text-zinc-400'}>
+                    {wordCount} words • Target: 150-250 words
+                  </span>
+                  <span className="font-mono text-zinc-500 hidden sm:inline">⌘/Ctrl + Enter to evaluate</span>
+                </div>
               </div>
 
-              <div className="flex justify-between items-center pt-1">
-                <span className="text-[11px] text-zinc-400">
-                  Target length: 150-250 words
-                </span>
+              <div className="flex justify-end items-center pt-1">
                 <Button
                   size="sm"
                   variant="glow"
                   disabled={isEvaluating || !response.trim()}
                   onClick={handleEvaluate}
-                  className="text-xs flex items-center gap-1.5 rounded-full px-4"
+                  className="text-xs flex items-center gap-1.5 rounded-full px-5"
                 >
                   {isEvaluating ? 'Evaluating STAR...' : 'Run Interview AI Evaluator'}
                   <Send className="w-3.5 h-3.5" />

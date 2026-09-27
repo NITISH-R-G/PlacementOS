@@ -1,19 +1,38 @@
 import * as React from 'react'
 import { cn } from '@/lib/utils'
 
-export const Card = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      'rounded-2xl border border-white/[0.08] bg-[#0c0d12]/90 backdrop-blur-xl text-zinc-100 shadow-2xl shadow-black/60 transition-all duration-200',
-      className
-    )}
-    {...props}
-  />
-))
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: 'default' | 'interactive' | 'metric' | 'action' | 'subtle'
+}
+
+export const Card = React.forwardRef<HTMLDivElement, CardProps>(
+  ({ className, variant = 'default', ...props }, ref) => {
+    const variantStyles = {
+      default:
+        'border-white/[0.08] bg-[#0c0d12]/90 shadow-2xl shadow-black/60',
+      interactive:
+        'border-white/[0.08] bg-[#0c0d12]/90 hover:border-white/25 hover:bg-[#101118] cursor-pointer shadow-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 active:scale-[0.99]',
+      metric:
+        'border-white/[0.08] bg-[#0c0d12]/90 shadow-xl backdrop-blur-xl',
+      action:
+        'border-white/[0.14] bg-gradient-to-b from-[#12141c] to-[#0c0d12] shadow-2xl shadow-black/70',
+      subtle:
+        'border-white/[0.05] bg-zinc-950/60 shadow-md',
+    }
+
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          'rounded-2xl border backdrop-blur-xl text-zinc-100 transition-all duration-200',
+          variantStyles[variant],
+          className
+        )}
+        {...props}
+      />
+    )
+  }
+)
 Card.displayName = 'Card'
 
 export const CardHeader = React.forwardRef<

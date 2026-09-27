@@ -1,18 +1,19 @@
 import React from 'react'
 import {
-  BarChart3,
   TrendingUp,
   Clock,
   CheckCircle2,
+  BarChart3,
   Flame,
+  Lightbulb,
 } from 'lucide-react'
 import {
-  ResponsiveContainer,
   BarChart,
   Bar,
   XAxis,
   YAxis,
   Tooltip,
+  ResponsiveContainer,
   CartesianGrid,
   Cell,
 } from 'recharts'
@@ -54,7 +55,7 @@ export const AnalyticsView: React.FC = () => {
         </div>
       </div>
 
-      {/* 4 Stat Cards */}
+      {/* 4 Stat Cards (Stripe / Vercel Metric pattern) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="border-white/[0.08] bg-[#0c0d12]/90 shadow-xl backdrop-blur-xl">
           <CardContent className="p-5 space-y-1.5">
@@ -62,7 +63,7 @@ export const AnalyticsView: React.FC = () => {
               <TrendingUp className="w-3.5 h-3.5 text-white" />
               Aggregate Readiness
             </span>
-            <div className="text-2xl font-bold font-mono text-white">{overallScore}%</div>
+            <div className="text-2xl sm:text-3xl font-bold font-mono text-white tracking-tight">{overallScore}%</div>
             <p className="text-[11px] text-emerald-400 font-medium">+4% over baseline</p>
           </CardContent>
         </Card>
@@ -73,7 +74,7 @@ export const AnalyticsView: React.FC = () => {
               <Flame className="w-3.5 h-3.5 text-amber-400" />
               Consistency Streak
             </span>
-            <div className="text-2xl font-bold font-mono text-amber-400">{streakDays} Days</div>
+            <div className="text-2xl sm:text-3xl font-bold font-mono text-amber-400 tracking-tight">{streakDays} Days</div>
             <p className="text-[11px] text-zinc-400 font-mono">Target: 30 days unbroken</p>
           </CardContent>
         </Card>
@@ -84,7 +85,7 @@ export const AnalyticsView: React.FC = () => {
               <Clock className="w-3.5 h-3.5 text-zinc-300" />
               Time Invested
             </span>
-            <div className="text-2xl font-bold font-mono text-white">{totalHoursStudied} Hours</div>
+            <div className="text-2xl sm:text-3xl font-bold font-mono text-white tracking-tight">{totalHoursStudied} Hours</div>
             <p className="text-[11px] text-zinc-400">Across all 10 modules</p>
           </CardContent>
         </Card>
@@ -95,7 +96,7 @@ export const AnalyticsView: React.FC = () => {
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
               Drills Completed
             </span>
-            <div className="text-2xl font-bold font-mono text-white">
+            <div className="text-2xl sm:text-3xl font-bold font-mono text-white tracking-tight">
               {completedResourceIds.length} Modules
             </div>
             <p className="text-[11px] text-zinc-400">Validated topics</p>
@@ -105,14 +106,33 @@ export const AnalyticsView: React.FC = () => {
 
       {/* Recharts Bar Chart: Readiness by Category */}
       <Card className="border-white/[0.08] bg-[#0c0d12]/90 shadow-xl backdrop-blur-xl">
-        <CardHeader>
-          <CardTitle className="text-base text-white font-bold tracking-tight">Dimensional Readiness Breakdown</CardTitle>
-          <CardDescription className="text-xs text-zinc-400">
-            Normalized readiness index (0 - 100) evaluated against target role standards.
-          </CardDescription>
+        <CardHeader className="pb-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <CardTitle className="text-base text-white font-bold tracking-tight">Dimensional Readiness Breakdown</CardTitle>
+              <CardDescription className="text-xs text-zinc-400">
+                Normalized readiness index (0 - 100) evaluated against target role standards.
+              </CardDescription>
+            </div>
+            {/* Visual Threshold Legend (Familiar BI / Dashboard convention) */}
+            <div className="flex items-center gap-3 text-[11px] text-zinc-400 font-mono">
+              <div className="flex items-center gap-1">
+                <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500" />
+                <span>&gt;70% Optimal</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="w-2.5 h-2.5 rounded-sm bg-white" />
+                <span>45-70% In Progress</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="w-2.5 h-2.5 rounded-sm bg-rose-500" />
+                <span>&lt;45% Priority Gap</span>
+              </div>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
-          <div className="h-64 w-full">
+          <div className="h-64 w-full pt-2">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
@@ -168,7 +188,7 @@ export const AnalyticsView: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* Weekly Consistency Visualizer */}
+      {/* Weekly Consistency Visualizer (GitHub / Duolingo heatmap convention) */}
       <Card className="border-white/[0.08] bg-[#0c0d12]/90 shadow-xl backdrop-blur-xl">
         <CardHeader>
           <CardTitle className="text-base text-white font-bold tracking-tight">Weekly Consistency Heatmap</CardTitle>
@@ -198,6 +218,19 @@ export const AnalyticsView: React.FC = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Actionable Engineering Insights Card */}
+      <div className="p-4 rounded-2xl border border-white/[0.08] bg-zinc-950/80 text-xs text-zinc-300 flex items-start gap-3.5 shadow-sm">
+        <Lightbulb className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+        <div className="space-y-1">
+          <strong className="text-white block font-semibold">Engine Telemetry Insights:</strong>
+          <ul className="text-zinc-400 space-y-1 text-[11px] list-disc list-inside">
+            <li><strong className="text-zinc-200">Velocity:</strong> Current trajectory projects an 85% composite score before Day 45.</li>
+            <li><strong className="text-zinc-200">Focus Recommendation:</strong> Prioritize 2 relational schema normalization drills this week to boost database score.</li>
+            <li><strong className="text-zinc-200">Cadence:</strong> Maintaining your {streakDays}-day streak satisfies the consistency threshold for top-tier campus recruitment drives.</li>
+          </ul>
+        </div>
+      </div>
     </div>
   )
 }
