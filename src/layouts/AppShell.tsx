@@ -35,7 +35,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     { id: 'roadmap', label: 'Roadmap', icon: Map },
     { id: 'practice', label: 'Practice Lab', icon: Code2 },
     { id: 'assessment', label: 'Diagnostic', icon: FileCheck2 },
-    { id: 'interviews', label: 'Mock Interview', icon: MessageSquareCode },
+    { id: 'interview', label: 'Mock Interview', icon: MessageSquareCode },
     { id: 'resources', label: 'Resources', icon: Library },
     { id: 'analytics', label: 'Readiness Analytics', icon: BarChart3 },
   ]
@@ -58,6 +58,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
             Deterministic Engine active. Continuous roadmap optimization enabled.
           </span>
         </div>
+
         <div className="hidden sm:flex items-center gap-3">
           <button
             onClick={() => {
@@ -114,7 +115,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                 <div className="bg-zinc-900/90 border border-white/[0.08] rounded-full p-1 flex items-center gap-1 shadow-inner">
                   {navItems.map((item) => {
                     const Icon = item.icon
-                    const isActive = activeTab === item.id
+                    const isActive = activeTab === item.id || (item.id === 'interview' && activeTab === 'interviews')
                     return (
                       <button
                         key={item.id}
@@ -186,7 +187,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 className={`whitespace-nowrap px-3 py-1 rounded-full text-xs flex items-center gap-1 transition-all ${
-                  activeTab === item.id
+                  activeTab === item.id || (item.id === 'interview' && activeTab === 'interviews')
                     ? 'bg-white text-black font-semibold'
                     : 'text-zinc-400 hover:text-zinc-200'
                 }`}
