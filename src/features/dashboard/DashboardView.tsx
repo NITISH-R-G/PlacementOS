@@ -48,7 +48,7 @@ export const DashboardView: React.FC = () => {
   return (
     <div className="space-y-8 pb-12">
       {/* 1. Header Greeting & Countdown Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-zinc-900">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
@@ -59,20 +59,20 @@ export const DashboardView: React.FC = () => {
             </Badge>
           </div>
           <p className="text-xs sm:text-sm text-zinc-400 mt-1">
-            Targeting <strong className="text-indigo-300">{formatRole(profile.targetRole)}</strong> at{' '}
+            Targeting <strong className="text-zinc-200">{formatRole(profile.targetRole)}</strong> at{' '}
             <span className="text-zinc-300">{profile.college}</span>
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="px-4 py-2 rounded-xl bg-zinc-900/80 border border-zinc-800 text-right">
+          <div className="px-4 py-2 rounded-xl bg-zinc-900/90 border border-white/[0.08] text-right shadow-sm">
             <div className="text-xs text-zinc-400 font-medium">Placement Countdown</div>
             <div className="text-lg font-bold font-mono text-white flex items-center gap-1.5 justify-end">
-              <Clock className="w-4 h-4 text-indigo-400" />
+              <Clock className="w-4 h-4 text-zinc-400" />
               <span>{profile.daysUntilPlacement} Days Left</span>
             </div>
           </div>
-          <div className="px-4 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-right">
+          <div className="px-4 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-right shadow-sm">
             <div className="text-xs text-amber-300 font-medium">Study Streak</div>
             <div className="text-lg font-bold font-mono text-amber-400 flex items-center gap-1.5 justify-end">
               <Flame className="w-4 h-4 fill-amber-400 text-amber-400" />
@@ -83,20 +83,20 @@ export const DashboardView: React.FC = () => {
       </div>
 
       {/* 2. Hero: Overall Placement Readiness & "What Matters Now" */}
-      <Card className="border-indigo-500/25 bg-gradient-to-br from-indigo-950/40 via-zinc-950 to-zinc-950 relative overflow-hidden shadow-2xl">
-        <div className="absolute right-0 top-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -z-0" />
+      <Card className="border-white/[0.12] bg-gradient-to-br from-zinc-950 via-[#0a0a0f] to-black relative overflow-hidden shadow-2xl">
+        <div className="absolute right-0 top-0 w-96 h-96 bg-white/[0.03] rounded-full blur-3xl pointer-events-none -z-0" />
         <CardContent className="p-6 sm:p-8 space-y-6 relative z-10">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="space-y-3 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-xs font-medium">
-                <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.06] border border-white/[0.1] text-zinc-200 text-xs font-medium">
+                <Sparkles className="w-3.5 h-3.5 text-white" />
                 <span>Deterministic Readiness Assessment</span>
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-white leading-snug">
                 Overall Placement Readiness Score
               </h2>
-              <div className="p-4 rounded-xl bg-zinc-900/80 border border-zinc-800/80 text-xs sm:text-sm text-zinc-300 leading-relaxed">
-                <strong className="text-indigo-400 font-semibold uppercase tracking-wider block text-[11px] mb-1">
+              <div className="p-4 rounded-xl bg-zinc-900/90 border border-white/[0.08] text-xs sm:text-sm text-zinc-300 leading-relaxed shadow-inner">
+                <strong className="text-white font-semibold uppercase tracking-wider block text-[11px] mb-1">
                   What Matters Now:
                 </strong>
                 {whatMattersNow}
@@ -104,7 +104,7 @@ export const DashboardView: React.FC = () => {
             </div>
 
             {/* Circular / Radial Score Stat Box */}
-            <div className="flex sm:flex-col items-center justify-center p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 min-w-[200px] text-center shadow-lg">
+            <div className="flex sm:flex-col items-center justify-center p-6 rounded-2xl bg-black/90 border border-white/[0.12] min-w-[200px] text-center shadow-2xl">
               <div className="text-5xl font-black font-mono tracking-tight text-white mb-1">
                 {overallScore}%
               </div>
@@ -119,7 +119,7 @@ export const DashboardView: React.FC = () => {
           </div>
 
           {/* Quick Stats Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-zinc-800/60 text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-white/[0.08] text-xs">
             <div>
               <span className="text-zinc-400 block mb-0.5">Hours Studied</span>
               <span className="text-base font-bold font-mono text-white">{totalHoursStudied}h</span>
@@ -130,7 +130,7 @@ export const DashboardView: React.FC = () => {
             </div>
             <div>
               <span className="text-zinc-400 block mb-0.5">Current Phase</span>
-              <span className="text-base font-semibold text-indigo-300">Phase {currentPhase.phaseNumber}</span>
+              <span className="text-base font-semibold text-white">Phase {currentPhase.phaseNumber}</span>
             </div>
             <div>
               <span className="text-zinc-400 block mb-0.5">Daily Budget</span>
@@ -144,11 +144,11 @@ export const DashboardView: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Today's Recommended Plan (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
-          <Card className="border-zinc-800 bg-zinc-950/80">
-            <CardHeader className="pb-3">
+          <Card className="border-white/[0.08] bg-[#0c0d12]/90">
+            <CardHeader className="pb-3 border-b border-white/[0.06]">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+                  <div className="w-7 h-7 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-white">
                     <Target className="w-4 h-4" />
                   </div>
                   <div>
@@ -163,13 +163,13 @@ export const DashboardView: React.FC = () => {
                 </Badge>
               </div>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-3 pt-4">
               {todayPlan.actions.length === 0 ? (
-                <div className="p-6 text-center text-xs text-zinc-400 bg-zinc-900/40 rounded-xl border border-dashed border-zinc-800">
+                <div className="p-6 text-center text-xs text-zinc-400 bg-zinc-900/40 rounded-xl border border-dashed border-white/[0.08]">
                   You have completed today's recommended sessions! Great job staying on track.
                 </div>
               ) : (
-                todayPlan.actions.map((action, idx) => {
+                todayPlan.actions.map((action) => {
                   const isDone = action.isCompleted
                   return (
                     <div
@@ -177,7 +177,7 @@ export const DashboardView: React.FC = () => {
                       className={`p-4 rounded-xl border transition-all ${
                         isDone
                           ? 'border-emerald-500/30 bg-emerald-950/10 text-zinc-400'
-                          : 'border-zinc-800 bg-zinc-900/60 hover:border-zinc-700 text-zinc-100'
+                          : 'border-white/[0.08] bg-zinc-900/70 hover:border-white/[0.15] text-zinc-100'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3">
@@ -187,36 +187,41 @@ export const DashboardView: React.FC = () => {
                             className={`mt-0.5 w-5 h-5 rounded-md border flex items-center justify-center transition-colors ${
                               isDone
                                 ? 'bg-emerald-500 border-emerald-400 text-black'
-                                : 'border-zinc-700 bg-zinc-900 hover:border-indigo-400'
+                                : 'border-zinc-700 bg-zinc-900 hover:border-white'
                             }`}
                           >
-                            {isDone && <CheckCircle2 className="w-3.5 h-3.5 stroke-[3]" />}
+                            {isDone && <CheckCircle2 className="w-3.5 h-3.5" />}
                           </button>
                           <div>
                             <div className="flex items-center gap-2">
-                              <h4
-                                className={`text-sm font-semibold ${
-                                  isDone ? 'line-through text-zinc-400' : 'text-white'
+                              <span
+                                className={`text-sm font-medium ${
+                                  isDone ? 'line-through text-zinc-400' : 'text-zinc-100'
                                 }`}
                               >
                                 {action.title}
-                              </h4>
-                              {idx === 0 && !isDone && (
-                                <Badge variant="default" className="text-[10px] py-0">
-                                  Top Focus
-                                </Badge>
-                              )}
+                              </span>
+                              <Badge
+                                variant={
+                                  action.priority === 'high'
+                                    ? 'destructive'
+                                    : action.priority === 'medium'
+                                    ? 'warning'
+                                    : 'secondary'
+                                }
+                                className="text-[10px] uppercase font-mono px-1.5 py-0"
+                              >
+                                {action.priority}
+                              </Badge>
                             </div>
-                            <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                            <p className="text-xs text-zinc-400 mt-0.5 leading-relaxed">
                               {action.rationale}
                             </p>
-                            <div className="flex items-center gap-3 text-[11px] text-zinc-400 mt-2 font-mono">
-                              <span className="flex items-center gap-1">
+                            <div className="flex items-center gap-3 mt-2 text-[11px] text-zinc-400">
+                              <span className="flex items-center gap-1 font-mono">
                                 <Clock className="w-3 h-3 text-zinc-400" />
-                                {action.estimatedMinutes} mins
+                                ~{action.estimatedMinutes} mins
                               </span>
-                              <span>•</span>
-                              <span className="capitalize">{action.dimension.replace('_', ' ')}</span>
                               {action.resource?.source && (
                                 <>
                                   <span>•</span>
@@ -234,7 +239,7 @@ export const DashboardView: React.FC = () => {
                               href={action.resource.sourceUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="p-1.5 rounded-lg border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors"
+                              className="p-1.5 rounded-lg border border-white/[0.08] bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors"
                               title="Open original open-source reference"
                             >
                               <ExternalLink className="w-3.5 h-3.5" />
@@ -258,8 +263,8 @@ export const DashboardView: React.FC = () => {
           </Card>
 
           {/* Current Roadmap Milestone Snapshot */}
-          <Card className="border-zinc-800 bg-zinc-950/80">
-            <CardHeader className="pb-3">
+          <Card className="border-white/[0.08] bg-[#0c0d12]/90">
+            <CardHeader className="pb-3 border-b border-white/[0.06]">
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-base text-white">Active Roadmap Phase</CardTitle>
@@ -271,13 +276,13 @@ export const DashboardView: React.FC = () => {
                   size="sm"
                   variant="ghost"
                   onClick={() => setActiveTab('roadmap')}
-                  className="text-xs text-indigo-400 hover:text-indigo-300"
+                  className="text-xs text-white hover:text-zinc-300"
                 >
                   View Full Roadmap →
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-3 pt-4">
               <p className="text-xs text-zinc-400 leading-relaxed">
                 {currentPhase.description}
               </p>
@@ -285,10 +290,10 @@ export const DashboardView: React.FC = () => {
                 {currentPhase.tasks.map((task) => (
                   <div
                     key={task.id}
-                    className="p-2.5 rounded-lg bg-zinc-900/60 border border-zinc-800/80 text-xs flex items-center justify-between"
+                    className="p-2.5 rounded-lg bg-zinc-900/60 border border-white/[0.06] text-xs flex items-center justify-between"
                   >
                     <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-white" />
                       <span className="text-zinc-200">{task.title}</span>
                     </div>
                     <span className="text-[11px] text-zinc-400 font-mono">
@@ -304,8 +309,8 @@ export const DashboardView: React.FC = () => {
         {/* Right Column: Skill Gaps & Readiness Matrix (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
           {/* Top 3 Skill Gaps */}
-          <Card className="border-zinc-800 bg-zinc-950/80">
-            <CardHeader className="pb-3">
+          <Card className="border-white/[0.08] bg-[#0c0d12]/90">
+            <CardHeader className="pb-3 border-b border-white/[0.06]">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-7 h-7 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
@@ -320,7 +325,7 @@ export const DashboardView: React.FC = () => {
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-3 pt-4">
               {skillGaps.map((gap, idx) => (
                 <div
                   key={idx}
@@ -334,16 +339,22 @@ export const DashboardView: React.FC = () => {
                   </div>
                   <p className="text-[11px] text-zinc-400 leading-relaxed">{gap.impact}</p>
                   <div className="flex items-center justify-between pt-1">
-                    <span className="text-[10px] text-indigo-400 font-medium truncate max-w-[200px]">
+                    <span className="text-[10px] text-zinc-300 font-medium truncate max-w-[200px]">
                       {gap.actionToFix}
                     </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => setActiveTab('practice')}
-                      className="text-[11px] h-7 px-2.5 hover:bg-zinc-800"
+                      onClick={() => {
+                        if (gap.suggestedResourceId) {
+                          toggleResourceCompletion(gap.suggestedResourceId)
+                        } else {
+                          setActiveTab('practice')
+                        }
+                      }}
+                      className="text-[11px] h-7 px-2.5"
                     >
-                      Fix this
+                      Address Gap →
                     </Button>
                   </div>
                 </div>
@@ -351,40 +362,49 @@ export const DashboardView: React.FC = () => {
             </CardContent>
           </Card>
 
-          {/* Readiness by Dimension Breakdown */}
-          <Card className="border-zinc-800 bg-zinc-950/80">
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-base text-white">Readiness Breakdown</CardTitle>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => setActiveTab('analytics')}
-                  className="text-xs text-indigo-400"
-                >
-                  Full Matrix →
-                </Button>
-              </div>
+          {/* 10-Dimension Readiness Matrix Progress Bars */}
+          <Card className="border-white/[0.08] bg-[#0c0d12]/90">
+            <CardHeader className="pb-3 border-b border-white/[0.06]">
+              <CardTitle className="text-base text-white">Dimensional Competency Matrix</CardTitle>
+              <CardDescription className="text-xs">
+                Empirical readiness calculated across 10 engineering pillars.
+              </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-3 text-xs">
-              {(Object.keys(readinessProfile) as SkillDimensionKey[]).slice(0, 6).map((dimKey) => {
+            <CardContent className="space-y-3 pt-4">
+              {(Object.keys(readinessProfile) as SkillDimensionKey[]).map((dimKey) => {
                 const item = readinessProfile[dimKey]
                 return (
                   <div key={dimKey} className="space-y-1">
-                    <div className="flex justify-between text-zinc-300">
-                      <span>{item.label}</span>
-                      <span className="font-mono text-zinc-400 font-semibold">{item.score}%</span>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-zinc-300 font-medium">{item.label}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-zinc-400 text-[11px]">
+                          {item.score}%
+                        </span>
+                        <Badge
+                          variant={
+                            item.score >= 70
+                              ? 'success'
+                              : item.score >= 45
+                              ? 'warning'
+                              : 'destructive'
+                          }
+                          className="px-1.5 py-0 text-[9px] uppercase font-mono"
+                        >
+                          {item.confidence}
+                        </Badge>
+                      </div>
                     </div>
                     <Progress
                       value={item.score}
-                      className="h-1.5"
                       indicatorClassName={
-                        item.score > 70
+                        item.score >= 70
                           ? 'bg-emerald-500'
-                          : item.score > 45
-                          ? 'bg-indigo-500'
+                          : item.score >= 45
+                          ? 'bg-amber-400'
                           : 'bg-rose-500'
                       }
+                      aria-label={`${item.label} competency progress`}
                     />
                   </div>
                 )
@@ -394,71 +414,31 @@ export const DashboardView: React.FC = () => {
         </div>
       </div>
 
-      {/* 4. Recommended Practice Lab Quick Drills */}
-      <Card className="border-zinc-800 bg-zinc-950/80">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="text-base text-white">Recommended Practice Drills</CardTitle>
-              <CardDescription className="text-xs">
-                Hand-picked from Striver A2Z, OSSU, and freeCodeCamp based on your weakest dimensions.
-              </CardDescription>
-            </div>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => setActiveTab('resources')}
-              className="text-xs"
-            >
-              Browse Full Catalog ({recommendedResources.length} available)
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {recommendedResources.slice(0, 3).map((res) => {
-              const isCompleted = completedResourceIds.includes(res.id)
-              return (
-                <div
-                  key={res.id}
-                  className="p-4 rounded-xl border border-zinc-800/80 bg-zinc-900/40 hover:border-zinc-700 transition-all flex flex-col justify-between"
-                >
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <Badge variant="cyan" className="text-[10px]">
-                        {res.category.toUpperCase()}
-                      </Badge>
-                      <span className="text-[10px] text-zinc-400 font-mono">
-                        {res.estimatedMinutes}m • {res.difficulty}
-                      </span>
-                    </div>
-                    <h4 className="text-sm font-semibold text-white leading-snug">
-                      {res.title}
-                    </h4>
-                    <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
-                      {res.description}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-4 mt-2 border-t border-zinc-800/60">
-                    <span className="text-[10px] text-zinc-400">
-                      Source: {res.source}
-                    </span>
-                    <Button
-                      size="sm"
-                      variant={isCompleted ? 'outline' : 'secondary'}
-                      onClick={() => toggleResourceCompletion(res.id)}
-                      className="text-xs h-7 px-3"
-                    >
-                      {isCompleted ? 'Completed ✓' : 'Mark Done'}
-                    </Button>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </CardContent>
-      </Card>
+      {/* 4. Quick Actions Row */}
+      <div className="p-4 rounded-xl border border-white/[0.08] bg-zinc-950/90 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <h4 className="text-sm font-semibold text-white">Continue Deliberate Practice</h4>
+          <p className="text-xs text-zinc-400">
+            Work through {recommendedResources.length} curated drills aligned with your target company patterns.
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setActiveTab('resources')}
+          >
+            Browse Resources
+          </Button>
+          <Button
+            size="sm"
+            variant="glow"
+            onClick={() => setActiveTab('practice')}
+          >
+            Launch Practice Lab →
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }

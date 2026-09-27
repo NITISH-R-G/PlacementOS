@@ -39,10 +39,13 @@ export const AnalyticsView: React.FC = () => {
   return (
     <div className="space-y-8 max-w-5xl mx-auto pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-900">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
         <div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs font-medium mb-2.5">
+            <BarChart3 className="w-3.5 h-3.5 text-white" />
+            <span>Placement Telemetry & Insights</span>
+          </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2.5">
-            <BarChart3 className="w-7 h-7 text-indigo-400" />
             Preparation Analytics & Readiness Velocity
           </h1>
           <p className="text-xs sm:text-sm text-zinc-400 mt-1">
@@ -53,10 +56,10 @@ export const AnalyticsView: React.FC = () => {
 
       {/* 4 Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border-zinc-800 bg-zinc-950/80">
-          <CardContent className="p-5 space-y-1">
-            <span className="text-xs text-zinc-400 flex items-center gap-1.5">
-              <TrendingUp className="w-3.5 h-3.5 text-indigo-400" />
+        <Card className="border-white/[0.08] bg-[#0c0d12]/90 shadow-xl backdrop-blur-xl">
+          <CardContent className="p-5 space-y-1.5">
+            <span className="text-xs text-zinc-400 flex items-center gap-1.5 font-medium">
+              <TrendingUp className="w-3.5 h-3.5 text-white" />
               Aggregate Readiness
             </span>
             <div className="text-2xl font-bold font-mono text-white">{overallScore}%</div>
@@ -64,21 +67,21 @@ export const AnalyticsView: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-zinc-800 bg-zinc-950/80">
-          <CardContent className="p-5 space-y-1">
-            <span className="text-xs text-zinc-400 flex items-center gap-1.5">
+        <Card className="border-white/[0.08] bg-[#0c0d12]/90 shadow-xl backdrop-blur-xl">
+          <CardContent className="p-5 space-y-1.5">
+            <span className="text-xs text-zinc-400 flex items-center gap-1.5 font-medium">
               <Flame className="w-3.5 h-3.5 text-amber-400" />
               Consistency Streak
             </span>
             <div className="text-2xl font-bold font-mono text-amber-400">{streakDays} Days</div>
-            <p className="text-[11px] text-zinc-400">Target: 30 days unbroken</p>
+            <p className="text-[11px] text-zinc-400 font-mono">Target: 30 days unbroken</p>
           </CardContent>
         </Card>
 
-        <Card className="border-zinc-800 bg-zinc-950/80">
-          <CardContent className="p-5 space-y-1">
-            <span className="text-xs text-zinc-400 flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-purple-400" />
+        <Card className="border-white/[0.08] bg-[#0c0d12]/90 shadow-xl backdrop-blur-xl">
+          <CardContent className="p-5 space-y-1.5">
+            <span className="text-xs text-zinc-400 flex items-center gap-1.5 font-medium">
+              <Clock className="w-3.5 h-3.5 text-zinc-300" />
               Time Invested
             </span>
             <div className="text-2xl font-bold font-mono text-white">{totalHoursStudied} Hours</div>
@@ -86,9 +89,9 @@ export const AnalyticsView: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-zinc-800 bg-zinc-950/80">
-          <CardContent className="p-5 space-y-1">
-            <span className="text-xs text-zinc-400 flex items-center gap-1.5">
+        <Card className="border-white/[0.08] bg-[#0c0d12]/90 shadow-xl backdrop-blur-xl">
+          <CardContent className="p-5 space-y-1.5">
+            <span className="text-xs text-zinc-400 flex items-center gap-1.5 font-medium">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
               Drills Completed
             </span>
@@ -101,10 +104,10 @@ export const AnalyticsView: React.FC = () => {
       </div>
 
       {/* Recharts Bar Chart: Readiness by Category */}
-      <Card className="border-zinc-800 bg-zinc-950/80">
+      <Card className="border-white/[0.08] bg-[#0c0d12]/90 shadow-xl backdrop-blur-xl">
         <CardHeader>
-          <CardTitle className="text-base text-white">Dimensional Readiness Breakdown</CardTitle>
-          <CardDescription className="text-xs">
+          <CardTitle className="text-base text-white font-bold tracking-tight">Dimensional Readiness Breakdown</CardTitle>
+          <CardDescription className="text-xs text-zinc-400">
             Normalized readiness index (0 - 100) evaluated against target role standards.
           </CardDescription>
         </CardHeader>
@@ -132,11 +135,11 @@ export const AnalyticsView: React.FC = () => {
                     if (active && payload && payload.length) {
                       const data = payload[0].payload
                       return (
-                        <div className="p-3 bg-zinc-900 border border-zinc-800 rounded-lg text-xs shadow-xl">
+                        <div className="p-3 bg-zinc-950 border border-white/[0.12] rounded-xl text-xs shadow-2xl">
                           <span className="font-semibold text-white block mb-1">
                             {data.fullName}
                           </span>
-                          <span className="text-indigo-400 font-mono font-bold">
+                          <span className="text-zinc-200 font-mono font-bold">
                             Score: {data.score}%
                           </span>
                         </div>
@@ -153,7 +156,7 @@ export const AnalyticsView: React.FC = () => {
                         entry.score > 70
                           ? '#10b981'
                           : entry.score > 45
-                          ? '#6366f1'
+                          ? '#ffffff'
                           : '#f43f5e'
                       }
                     />
@@ -166,10 +169,10 @@ export const AnalyticsView: React.FC = () => {
       </Card>
 
       {/* Weekly Consistency Visualizer */}
-      <Card className="border-zinc-800 bg-zinc-950/80">
+      <Card className="border-white/[0.08] bg-[#0c0d12]/90 shadow-xl backdrop-blur-xl">
         <CardHeader>
-          <CardTitle className="text-base text-white">Weekly Consistency Heatmap</CardTitle>
-          <CardDescription className="text-xs">
+          <CardTitle className="text-base text-white font-bold tracking-tight">Weekly Consistency Heatmap</CardTitle>
+          <CardDescription className="text-xs text-zinc-400">
             Daily practice sessions completed over the active training cycle.
           </CardDescription>
         </CardHeader>
@@ -179,12 +182,12 @@ export const AnalyticsView: React.FC = () => {
               const isActive = idx <= streakDays
               return (
                 <div key={day} className="space-y-1.5">
-                  <span className="text-[11px] text-zinc-400">{day}</span>
+                  <span className="text-[11px] text-zinc-400 font-medium">{day}</span>
                   <div
-                    className={`h-12 rounded-lg border flex items-center justify-center font-mono font-bold text-xs transition-colors ${
+                    className={`h-12 rounded-xl border flex items-center justify-center font-mono font-bold text-xs transition-colors ${
                       isActive
-                        ? 'border-indigo-500/40 bg-indigo-500/20 text-indigo-300'
-                        : 'border-zinc-800 bg-zinc-900/40 text-zinc-600'
+                        ? 'border-white/20 bg-white/10 text-white shadow-sm'
+                        : 'border-white/[0.04] bg-zinc-950/40 text-zinc-600'
                     }`}
                   >
                     {isActive ? '✓' : '-'}

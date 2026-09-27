@@ -3,6 +3,7 @@ import {
   MapPin,
   CheckCircle2,
   Calendar,
+  Sparkles,
 } from 'lucide-react'
 import { usePlacementStore } from '@/store/usePlacementStore'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -16,10 +17,10 @@ export const RoadmapView: React.FC = () => {
   return (
     <div className="space-y-8 max-w-5xl mx-auto pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-900">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-medium mb-2">
-            <MapPin className="w-3.5 h-3.5 text-indigo-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs font-medium mb-2.5">
+            <MapPin className="w-3.5 h-3.5 text-white" />
             <span>Target Role: {profile.targetRole.replace('_', ' ').toUpperCase()}</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
@@ -34,6 +35,7 @@ export const RoadmapView: React.FC = () => {
           <Button
             size="sm"
             variant="outline"
+            className="rounded-full bg-zinc-900/90 border border-white/[0.1] text-zinc-300 hover:text-white hover:bg-zinc-800 transition-all text-xs"
             onClick={() => setActiveTab('dashboard')}
           >
             ← Back to Dashboard
@@ -47,45 +49,50 @@ export const RoadmapView: React.FC = () => {
           return (
             <Card
               key={phase.id}
-              className={`border transition-all ${
+              className={`border transition-all duration-300 ${
                 phase.isCurrent
-                  ? 'border-indigo-500/40 bg-zinc-950/90 shadow-indigo-500/10 shadow-xl'
-                  : 'border-zinc-800/80 bg-zinc-950/50'
+                  ? 'border-white/[0.25] bg-[#0d0e14]/95 shadow-[0_0_30px_-10px_rgba(255,255,255,0.08)]'
+                  : 'border-white/[0.06] bg-[#0c0d12]/70 hover:border-white/[0.12]'
               }`}
             >
               <CardHeader className="pb-3">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <div className="flex items-center gap-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-3.5">
                     <div
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs tracking-wider transition-colors ${
                         phase.isCurrent
-                          ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/30'
-                          : 'bg-zinc-800 text-zinc-400'
+                          ? 'bg-white text-black shadow-lg shadow-white/10'
+                          : 'bg-zinc-900 border border-white/[0.08] text-zinc-400'
                       }`}
                     >
                       P{phase.phaseNumber}
                     </div>
                     <div>
-                      <div className="flex items-center gap-2">
-                        <CardTitle className="text-base text-white">
+                      <div className="flex items-center gap-2.5">
+                        <CardTitle className="text-base text-white font-semibold">
                           {phase.phaseTitle}
                         </CardTitle>
                         {phase.isCurrent && (
-                          <Badge variant="cyan" className="text-[10px]">
+                          <Badge variant="secondary" className="bg-white/10 text-white border-white/20 text-[10px] uppercase font-mono px-2 py-0.5 rounded-full flex items-center gap-1">
+                            <Sparkles className="w-2.5 h-2.5 text-white" />
                             Current Sprint
                           </Badge>
                         )}
                       </div>
-                      <CardDescription className="text-xs text-zinc-400 flex items-center gap-2 mt-0.5 font-mono">
-                        <Calendar className="w-3 h-3 text-zinc-400" />
+                      <CardDescription className="text-xs text-zinc-400 flex items-center gap-2 mt-1 font-mono">
+                        <Calendar className="w-3 h-3 text-zinc-500" />
                         {phase.daysWindow}
                       </CardDescription>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-1.5">
                     {phase.focusAreas.map((area) => (
-                      <Badge key={area} variant="secondary" className="text-[10px] uppercase font-mono">
+                      <Badge
+                        key={area}
+                        variant="secondary"
+                        className="text-[10px] uppercase font-mono bg-zinc-900/90 text-zinc-300 border-white/[0.06] px-2 py-0.5"
+                      >
                         {area.replace('_', ' ')}
                       </Badge>
                     ))}
@@ -93,28 +100,35 @@ export const RoadmapView: React.FC = () => {
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-xs text-zinc-300 leading-relaxed">
+                <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
                   {phase.description}
                 </p>
 
                 {/* Milestone Tasks */}
-                <div className="space-y-2 pt-2 border-t border-zinc-900">
-                  <div className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider">
-                    Milestone Deliverables:
+                <div className="space-y-2.5 pt-3 border-t border-white/[0.06]">
+                  <div className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider flex items-center justify-between">
+                    <span>Milestone Deliverables:</span>
+                    <span className="font-mono text-[10px] text-zinc-400">
+                      {phase.tasks.filter((t) => t.completed).length} / {phase.tasks.length} Completed
+                    </span>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {phase.tasks.map((task) => (
                       <div
                         key={task.id}
-                        className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800/80 text-xs flex items-center justify-between"
+                        className={`p-3 rounded-xl border text-xs flex items-center justify-between transition-colors ${
+                          task.completed
+                            ? 'bg-zinc-950/40 border-white/[0.04]'
+                            : 'bg-zinc-900/60 border-white/[0.08] hover:border-white/[0.14]'
+                        }`}
                       >
                         <div className="flex items-center gap-2.5">
                           <CheckCircle2
-                            className={`w-4 h-4 ${
+                            className={`w-4 h-4 shrink-0 ${
                               task.completed ? 'text-emerald-400' : 'text-zinc-600'
                             }`}
                           />
-                          <span className={task.completed ? 'line-through text-zinc-500' : 'text-zinc-200'}>
+                          <span className={task.completed ? 'line-through text-zinc-500' : 'text-zinc-200 font-medium'}>
                             {task.title}
                           </span>
                         </div>
