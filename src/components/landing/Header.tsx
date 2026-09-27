@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
           aria-label="PlacementOS Home"
         >
           <img
-            src="/assets/logo.svg"
+            src="./assets/logo.svg"
             width={52}
             height={52}
             alt="PlacementOS Mark"
