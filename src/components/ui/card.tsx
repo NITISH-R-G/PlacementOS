@@ -1,31 +1,28 @@
-import * as React from 'react'
-import { cn } from '@/lib/utils'
+import * as React from "react"
+import { cn } from "@/lib/utils"
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'default' | 'interactive' | 'metric' | 'action' | 'subtle'
+  variant?: "default" | "interactive" | "metric" | "action" | "subtle"
 }
 
-export const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, variant = 'default', ...props }, ref) => {
+const Card = React.forwardRef<HTMLDivElement, CardProps>(
+  ({ className, variant = "default", ...props }, ref) => {
     const variantStyles = {
-      default:
-        'border-white/[0.08] bg-[#0c0d12]/90 shadow-2xl shadow-black/60',
+      default: "border-border/60 bg-card/60 text-card-foreground",
       interactive:
-        'border-white/[0.08] bg-[#0c0d12]/90 hover:border-white/25 hover:bg-[#101118] cursor-pointer shadow-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 active:scale-[0.99]',
-      metric:
-        'border-white/[0.08] bg-[#0c0d12]/90 shadow-xl backdrop-blur-xl',
-      action:
-        'border-white/[0.14] bg-gradient-to-b from-[#12141c] to-[#0c0d12] shadow-2xl shadow-black/70',
-      subtle:
-        'border-white/[0.05] bg-zinc-950/60 shadow-md',
-    }
+        "border-border/60 bg-card/60 text-card-foreground transition-all duration-200 hover:border-white/20 hover:bg-card/90 cursor-pointer shadow-sm hover:shadow-md",
+      metric: "border-border/50 bg-card/50 text-card-foreground p-4",
+      action: "border-primary/40 bg-primary/5 text-card-foreground hover:border-primary/60",
+      subtle: "border-border/30 bg-card/30 text-card-foreground",
+    }[variant]
 
     return (
       <div
         ref={ref}
+        data-slot="card"
         className={cn(
-          'rounded-2xl border backdrop-blur-xl text-zinc-100 transition-all duration-200',
-          variantStyles[variant],
+          "rounded-xl border backdrop-blur-sm shadow-sm transition-colors",
+          variantStyles,
           className
         )}
         {...props}
@@ -33,60 +30,81 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
     )
   }
 )
-Card.displayName = 'Card'
+Card.displayName = "Card"
 
-export const CardHeader = React.forwardRef<
+const CardHeader = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn('flex flex-col space-y-1.5 p-6', className)}
+    data-slot="card-header"
+    className={cn("flex flex-col space-y-1.5 p-6", className)}
     {...props}
   />
 ))
-CardHeader.displayName = 'CardHeader'
+CardHeader.displayName = "CardHeader"
 
-export const CardTitle = React.forwardRef<
-  HTMLHeadingElement,
+const CardTitle = React.forwardRef<
+  HTMLParagraphElement,
   React.HTMLAttributes<HTMLHeadingElement>
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={cn('text-lg font-semibold leading-tight tracking-tight text-white', className)}
+    data-slot="card-title"
+    className={cn(
+      "font-semibold leading-none tracking-tight text-foreground",
+      className
+    )}
     {...props}
   />
 ))
-CardTitle.displayName = 'CardTitle'
+CardTitle.displayName = "CardTitle"
 
-export const CardDescription = React.forwardRef<
+const CardDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn('text-xs text-zinc-400 leading-relaxed', className)}
+    data-slot="card-description"
+    className={cn("text-sm text-muted-foreground", className)}
     {...props}
   />
 ))
-CardDescription.displayName = 'CardDescription'
+CardDescription.displayName = "CardDescription"
 
-export const CardContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn('p-6 pt-0', className)} {...props} />
-))
-CardContent.displayName = 'CardContent'
-
-export const CardFooter = React.forwardRef<
+const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn('flex items-center p-6 pt-0 border-t border-white/[0.06] mt-4', className)}
+    data-slot="card-content"
+    className={cn("p-6 pt-0", className)}
     {...props}
   />
 ))
-CardFooter.displayName = 'CardFooter'
+CardContent.displayName = "CardContent"
+
+const CardFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    data-slot="card-footer"
+    className={cn("flex items-center p-6 pt-0", className)}
+    {...props}
+  />
+))
+CardFooter.displayName = "CardFooter"
+
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  CardContent,
+}

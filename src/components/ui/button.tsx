@@ -1,56 +1,61 @@
-import * as React from 'react'
-import { cva, type VariantProps } from 'class-variance-authority'
-import { cn } from '@/lib/utils'
+import * as React from "react"
+import { Button as ButtonPrimitive } from "@base-ui/react/button"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]',
+  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
-        default:
-          'bg-white text-black font-semibold shadow-md shadow-white/10 hover:bg-zinc-200 hover:shadow-white/20',
-        destructive:
-          'bg-rose-600 text-white shadow-sm hover:bg-rose-500',
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
         outline:
-          'border border-white/[0.1] bg-zinc-900/60 text-zinc-100 hover:bg-white hover:text-black hover:border-white',
+          "border border-border bg-background hover:bg-muted hover:text-foreground dark:border-white/15 dark:bg-white/5 dark:hover:bg-white/10",
         secondary:
-          'bg-zinc-800/80 text-zinc-100 hover:bg-zinc-700/80 border border-white/[0.06]',
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost:
-          'text-zinc-400 hover:bg-zinc-800/60 hover:text-zinc-100',
-        link:
-          'text-white underline-offset-4 hover:underline',
-        glow:
-          'bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 text-white font-semibold shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:opacity-95',
+          "hover:bg-muted hover:text-foreground dark:hover:bg-white/5",
+        destructive:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        link: "text-primary underline-offset-4 hover:underline",
+        glow: "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-[0_0_20px_rgba(99,102,241,0.35)] hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] hover:opacity-95",
       },
       size: {
-        default: 'h-9 px-4 py-2',
-        sm: 'h-8 rounded-md px-3 text-xs',
-        lg: 'h-11 rounded-xl px-6 text-base font-semibold',
-        icon: 'h-9 w-9',
+        default: "h-9 px-4 py-2 gap-2",
+        xs: "h-6 px-2 text-xs rounded-md gap-1",
+        sm: "h-8 px-3 text-xs rounded-md gap-1.5",
+        lg: "h-10 px-6 text-base rounded-md gap-2.5",
+        icon: "size-9 p-0",
+        "icon-xs": "size-6 p-0",
+        "icon-sm": "size-8 p-0",
+        "icon-lg": "size-10 p-0",
       },
     },
     defaultVariants: {
-      variant: 'default',
-      size: 'default',
+      variant: "default",
+      size: "default",
     },
   }
 )
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+interface ButtonProps
+  extends ButtonPrimitive.Props,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean
+  className?: string
 }
 
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, ...props }, ref) => {
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant = "default", size = "default", ...props }, ref) => {
     return (
-      <button
-        className={cn(buttonVariants({ variant, size, className }))}
+      <ButtonPrimitive
         ref={ref}
+        data-slot="button"
+        className={cn(buttonVariants({ variant, size, className }))}
         {...props}
       />
     )
   }
 )
-Button.displayName = 'Button'
+Button.displayName = "Button"
+
+export { Button, buttonVariants }

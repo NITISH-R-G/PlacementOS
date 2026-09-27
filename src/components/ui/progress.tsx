@@ -1,36 +1,39 @@
-import * as React from 'react'
-import { cn } from '@/lib/utils'
+import * as React from "react"
+import { cn } from "@/lib/utils"
 
 export interface ProgressProps extends React.HTMLAttributes<HTMLDivElement> {
   value?: number
   indicatorClassName?: string
 }
 
-export const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
+const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
   ({ className, value = 0, indicatorClassName, ...props }, ref) => {
-    const clamped = Math.min(100, Math.max(0, value))
+    const clampedValue = Math.min(Math.max(value ?? 0, 0), 100)
+
     return (
       <div
         ref={ref}
         role="progressbar"
-        aria-valuenow={clamped}
+        aria-valuenow={clampedValue}
         aria-valuemin={0}
         aria-valuemax={100}
         className={cn(
-          'relative h-2 w-full overflow-hidden rounded-full bg-zinc-800/80',
+          "relative h-2 w-full overflow-hidden rounded-full bg-secondary/60",
           className
         )}
         {...props}
       >
         <div
           className={cn(
-            'h-full w-full flex-1 transition-all duration-500 ease-out bg-indigo-500',
+            "h-full w-full flex-1 bg-primary transition-all duration-300",
             indicatorClassName
           )}
-          style={{ transform: `translateX(-${100 - clamped}%)` }}
+          style={{ transform: `translateX(-${100 - clampedValue}%)` }}
         />
       </div>
     )
   }
 )
-Progress.displayName = 'Progress'
+Progress.displayName = "Progress"
+
+export { Progress }

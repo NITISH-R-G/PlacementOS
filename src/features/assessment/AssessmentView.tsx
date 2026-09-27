@@ -7,6 +7,7 @@ import {
   ArrowRight,
   RotateCcw,
   Sparkles,
+  HelpCircle,
 } from 'lucide-react'
 import { DIAGNOSTIC_QUESTIONS } from '@/data/diagnosticQuestions'
 import { usePlacementStore } from '@/store/usePlacementStore'
@@ -14,6 +15,17 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
+import { Separator } from '@/components/ui/separator'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 
 export const AssessmentView: React.FC = () => {
   const { completeOnboarding, profile, setActiveTab } = usePlacementStore()
@@ -22,6 +34,7 @@ export const AssessmentView: React.FC = () => {
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({})
   const [submittedAnswers, setSubmittedAnswers] = useState<Record<string, boolean>>({})
   const [isCompleted, setIsCompleted] = useState(false)
+  const [retakeDialogOpen, setRetakeDialogOpen] = useState(false)
 
   const q = DIAGNOSTIC_QUESTIONS[currentIdx]
   const totalQuestions = DIAGNOSTIC_QUESTIONS.length
@@ -65,17 +78,27 @@ export const AssessmentView: React.FC = () => {
     }
   }
 
+  const handleConfirmRetake = () => {
+    setSelectedAnswers({})
+    setSubmittedAnswers({})
+    setCurrentIdx(0)
+    setIsCompleted(false)
+    setRetakeDialogOpen(false)
+  }
+
   const answeredCount = Object.keys(selectedAnswers).length
   const optionLetters = ['A', 'B', 'C', 'D', 'E']
 
   return (
     <div className="max-w-3xl mx-auto space-y-6 pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs font-medium mb-2.5">
-            <FileCheck2 className="w-3.5 h-3.5 text-white" />
-            <span>Verification Test Bench</span>
+          <div className="inline-flex items-center gap-2 mb-2.5">
+            <Badge variant="outline" className="px-3 py-1 text-xs gap-1.5 font-medium border-white/[0.1] bg-white/[0.03] text-zinc-300">
+              <FileCheck2 className="w-3.5 h-3.5 text-white" />
+              <span>Verification Test Bench</span>
+            </Badge>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2.5">
             Diagnostic Skill Assessment
@@ -86,15 +109,16 @@ export const AssessmentView: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <Badge variant="cyan" className="font-mono text-xs">
+          <Badge variant="cyan" className="font-mono text-xs px-2.5 py-1">
             {answeredCount}/{totalQuestions} Answered
           </Badge>
         </div>
       </div>
+      <Separator className="bg-white/[0.08]" />
 
       {!isCompleted ? (
         <Card className="border-white/[0.08] bg-[#0c0d12]/90 shadow-2xl backdrop-blur-xl">
-          {/* Progress Header & Question Palette (HackerRank / Standard Testing convention) */}
+          {/* Progress Header & Question Palette */}
           <div className="p-4 sm:px-6 border-b border-white/[0.06] bg-zinc-950/60 space-y-3">
             <div className="flex items-center justify-between text-xs">
               <span className="text-zinc-400 font-mono">
@@ -145,28 +169,42 @@ export const AssessmentView: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 pt-4">
-            {/* Multiple Choice Options with Conventional Letter Badges */}
-            <div className="space-y-2.5">
+            {/* Multiple Choice Options with shadcn RadioGroup */}
+            <RadioGroup
+              value={selectedAnswers[q.id] || ''}
+              onValueChange={(val) => {
+                if (!submittedAnswers[q.id]) {
+                  handleSelect(q.id, val)
+                }
+              }}
+              className="space-y-2.5"
+            >
               {q.options.map((opt, optIdx) => {
                 const isSelected = selectedAnswers[q.id] === opt.id
                 const isSubmitted = submittedAnswers[q.id]
                 const isCorrect = opt.id === q.correctOptionId
 
-                let style = 'border-white/[0.06] bg-zinc-900/50 hover:border-white/[0.15] text-zinc-300'
-                if (isSelected) style = 'border-white/[0.3] bg-[#1a1b24] text-white shadow-md'
+                let containerStyle = 'border-white/[0.06] bg-zinc-900/50 hover:border-white/[0.15] text-zinc-300'
+                if (isSelected) containerStyle = 'border-white/[0.3] bg-[#1a1b24] text-white shadow-md'
                 if (isSubmitted) {
-                  if (isCorrect) style = 'border-emerald-500/50 bg-emerald-950/20 text-emerald-300 font-semibold'
-                  else if (isSelected) style = 'border-rose-500/50 bg-rose-950/20 text-rose-300'
+                  if (isCorrect) containerStyle = 'border-emerald-500/50 bg-emerald-950/20 text-emerald-300 font-semibold'
+                  else if (isSelected) containerStyle = 'border-rose-500/50 bg-rose-950/20 text-rose-300'
                 }
 
                 return (
-                  <button
+                  <label
                     key={opt.id}
-                    disabled={isSubmitted}
-                    onClick={() => handleSelect(q.id, opt.id)}
-                    className={`w-full p-3.5 sm:p-4 rounded-xl border text-left text-xs transition-all flex items-center justify-between cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${style}`}
+                    onClick={() => {
+                      if (!isSubmitted) handleSelect(q.id, opt.id)
+                    }}
+                    className={`w-full p-3.5 sm:p-4 rounded-xl border text-left text-xs transition-all flex items-center justify-between cursor-pointer focus-within:ring-2 focus-within:ring-white/40 ${containerStyle}`}
                   >
                     <div className="flex items-center gap-3">
+                      <RadioGroupItem
+                        value={opt.id}
+                        disabled={isSubmitted}
+                        className="border-zinc-600 data-checked:border-white data-checked:bg-white text-black"
+                      />
                       <div
                         className={`w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-semibold shrink-0 transition-colors ${
                           isSelected
@@ -185,10 +223,10 @@ export const AssessmentView: React.FC = () => {
                     {isSubmitted && isSelected && !isCorrect && (
                       <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 ml-2" />
                     )}
-                  </button>
+                  </label>
                 )
               })}
-            </div>
+            </RadioGroup>
 
             {submittedAnswers[q.id] && (
               <div className="p-3.5 rounded-xl bg-zinc-950 border border-white/[0.08] text-xs space-y-1 mt-2 animate-in fade-in">
@@ -245,19 +283,42 @@ export const AssessmentView: React.FC = () => {
               Your placement readiness matrix has been updated with these verified responses. All recommended sprints and practice drills are now calibrated.
             </p>
             <div className="pt-3 flex items-center justify-center gap-3">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSelectedAnswers({})
-                  setSubmittedAnswers({})
-                  setCurrentIdx(0)
-                  setIsCompleted(false)
-                }}
-                className="rounded-full px-4 text-xs"
-              >
-                <RotateCcw className="w-3.5 h-3.5 mr-1" />
-                Retake Assessment
-              </Button>
+              <Dialog open={retakeDialogOpen} onOpenChange={setRetakeDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" className="rounded-full px-4 text-xs">
+                    <RotateCcw className="w-3.5 h-3.5 mr-1" />
+                    Retake Assessment
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md border-white/[0.12] bg-[#0c0d12] text-white">
+                  <DialogHeader>
+                    <DialogTitle className="text-lg font-bold text-white flex items-center gap-2">
+                      <HelpCircle className="w-5 h-5 text-amber-400" />
+                      Retake Diagnostic Assessment?
+                    </DialogTitle>
+                    <DialogDescription className="text-zinc-400 text-xs leading-relaxed pt-2">
+                      Retaking the diagnostic will clear your previous question responses and initiate a new scoring calibration across all engineering dimensions.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter className="mt-4 gap-2">
+                    <Button
+                      variant="ghost"
+                      onClick={() => setRetakeDialogOpen(false)}
+                      className="text-xs text-zinc-400"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      variant="glow"
+                      onClick={handleConfirmRetake}
+                      className="text-xs rounded-full px-4"
+                    >
+                      Confirm & Start Over
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+
               <Button
                 variant="glow"
                 onClick={() => setActiveTab('dashboard')}

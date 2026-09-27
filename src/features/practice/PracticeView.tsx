@@ -9,6 +9,7 @@ import {
   RotateCcw,
   FileCode,
   Terminal,
+  HelpCircle,
 } from 'lucide-react'
 import { usePlacementStore } from '@/store/usePlacementStore'
 import { INITIAL_RESOURCES } from '@/data/resources'
@@ -16,6 +17,16 @@ import { LearningResource } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 
 const CATEGORIES: { id: string; label: string }[] = [
   { id: 'all', label: 'All Categories' },
@@ -78,27 +89,27 @@ export const PracticeView: React.FC = () => {
     switch (diff) {
       case 'Easy':
         return (
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
+          <Badge variant="success" className="text-[10px] font-mono px-2 py-0.5">
             Easy
-          </span>
+          </Badge>
         )
       case 'Medium':
         return (
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-medium">
+          <Badge variant="warning" className="text-[10px] font-mono px-2 py-0.5">
             Medium
-          </span>
+          </Badge>
         )
       case 'Hard':
         return (
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-medium">
+          <Badge variant="destructive" className="text-[10px] font-mono px-2 py-0.5">
             Hard
-          </span>
+          </Badge>
         )
       default:
         return (
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700 font-medium">
+          <Badge variant="secondary" className="text-[10px] font-mono px-2 py-0.5">
             {diff}
-          </span>
+          </Badge>
         )
     }
   }
@@ -106,9 +117,9 @@ export const PracticeView: React.FC = () => {
   return (
     <div className="space-y-8 pb-12 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-border/50">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs font-medium mb-2.5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-border/60 text-zinc-300 text-xs font-medium mb-2.5">
             <Code2 className="w-3.5 h-3.5 text-white" />
             <span>Interactive Practice Lab</span>
           </div>
@@ -121,15 +132,15 @@ export const PracticeView: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-white/[0.08] text-xs text-zinc-300 flex items-center gap-2 font-mono">
+          <div className="px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-border/60 text-xs text-zinc-300 flex items-center gap-2 font-mono">
             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
             <span>{completedResourceIds.length} Solved</span>
           </div>
         </div>
       </div>
 
-      {/* Category Filter Pills (LeetCode / Linear Segmented filter pattern) */}
-      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-zinc-950/80 border border-white/[0.06] backdrop-blur-md">
+      {/* Category Filter Pills */}
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-zinc-950/80 border border-border/40 backdrop-blur-md">
         {CATEGORIES.map((cat) => (
           <button
             key={cat.id}
@@ -149,16 +160,16 @@ export const PracticeView: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left: Problem Catalog (5 cols) */}
         <div className="lg:col-span-5 space-y-3">
-          {/* Quick Problem Search Filter */}
+          {/* Quick Problem Search Filter with shadcn Input */}
           <div className="relative">
-            <Search className="w-3.5 h-3.5 text-zinc-500 absolute left-3 top-2.5" />
-            <input
+            <Search className="w-3.5 h-3.5 text-zinc-500 absolute left-3 top-2.5 z-10" />
+            <Input
               type="text"
               aria-label="Filter problems"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search problem drills..."
-              className="w-full bg-zinc-950/90 border border-white/[0.08] rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/30 transition-colors"
+              className="w-full bg-zinc-950/90 border border-border/60 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder:text-zinc-500 focus-visible:ring-1 focus-visible:ring-white/20 transition-colors"
             />
           </div>
 
@@ -182,8 +193,8 @@ export const PracticeView: React.FC = () => {
                   }}
                   className={`p-3.5 rounded-xl border cursor-pointer transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${
                     isSelected
-                      ? 'border-white/[0.3] bg-[#12131a] shadow-lg shadow-black/40'
-                      : 'border-white/[0.06] bg-[#0c0d12]/80 hover:border-white/[0.14] hover:bg-[#0f1017]'
+                      ? 'border-border/90 bg-[#12131a] shadow-lg shadow-black/40'
+                      : 'border-border/40 bg-[#0c0d12]/80 hover:border-border/80 hover:bg-[#0f1017]'
                   }`}
                   tabIndex={0}
                   role="button"
@@ -196,7 +207,7 @@ export const PracticeView: React.FC = () => {
                   }}
                 >
                   <div className="flex items-center justify-between text-[11px] mb-1.5">
-                    <Badge variant="secondary" className="text-[9px] py-0 px-2 font-mono uppercase bg-zinc-900 text-zinc-300 border-white/[0.06]">
+                    <Badge variant="secondary" className="text-[9px] py-0 px-2 font-mono uppercase bg-zinc-900 text-zinc-300 border-border/40">
                       {res.category.toUpperCase()}
                     </Badge>
                     <div className="flex items-center gap-1.5">
@@ -208,7 +219,7 @@ export const PracticeView: React.FC = () => {
                     {isDone && <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />}
                     {res.title}
                   </h4>
-                  <div className="flex items-center justify-between pt-2.5 mt-2.5 border-t border-white/[0.06] text-[10px] text-zinc-400">
+                  <div className="flex items-center justify-between pt-2.5 mt-2.5 border-t border-border/40 text-[10px] text-zinc-400">
                     <span>Source: {res.source}</span>
                     <button
                       onClick={(e) => {
@@ -232,8 +243,8 @@ export const PracticeView: React.FC = () => {
         {/* Right: Active Drill & AI Evaluation Console (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
           {activeDrill ? (
-            <Card className="border-white/[0.08] bg-[#0c0d12]/90 shadow-2xl backdrop-blur-xl">
-              <CardHeader className="pb-3 border-b border-white/[0.06]">
+            <Card className="border-border/60 bg-[#0c0d12]/90 shadow-2xl backdrop-blur-xl">
+              <CardHeader className="pb-3 border-b border-border/40">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Badge variant="default" className="text-xs font-mono">
@@ -244,16 +255,47 @@ export const PracticeView: React.FC = () => {
                       ~{activeDrill.estimatedMinutes} mins
                     </span>
                   </div>
-                  {activeDrill.sourceUrl && (
-                    <a
-                      href={activeDrill.sourceUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-zinc-300 hover:text-white hover:underline flex items-center gap-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40 rounded"
-                    >
-                      Reference Source <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
+                  <div className="flex items-center gap-3">
+                    {/* Solution Hints Dialog */}
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="ghost" size="xs" className="text-xs text-zinc-400 hover:text-white flex items-center gap-1">
+                          <HelpCircle className="w-3.5 h-3.5" />
+                          <span>Hints</span>
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="bg-zinc-950 border-border/80 text-zinc-200">
+                        <DialogHeader>
+                          <DialogTitle className="text-white">Solution Strategy Hint</DialogTitle>
+                          <DialogDescription className="text-zinc-400 text-xs mt-1">
+                            {activeDrill.title} ({activeDrill.subcategory})
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="space-y-3 text-xs leading-relaxed text-zinc-300 py-2">
+                          <p>
+                            1. <strong>Optimal Pattern:</strong> Identify whether a two-pointer, sliding window, prefix sum, or binary search reduction yields minimum complexity.
+                          </p>
+                          <p>
+                            2. <strong>Boundary Edge Cases:</strong> Consider empty inputs, duplicate elements, negative values, and integer overflow constraints.
+                          </p>
+                          <p>
+                            3. <strong>Space Target:</strong> Avoid redundant auxiliary data structures if mutations can be applied in-place.
+                          </p>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+
+                    {activeDrill.sourceUrl && (
+                      <a
+                        href={activeDrill.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-zinc-300 hover:text-white hover:underline flex items-center gap-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40 rounded"
+                      >
+                        Reference Source <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                  </div>
                 </div>
                 <CardTitle className="text-lg text-white mt-2 font-bold tracking-tight">
                   {activeDrill.title}
@@ -293,7 +335,8 @@ export const PracticeView: React.FC = () => {
                     </div>
                   </div>
 
-                  <textarea
+                  {/* shadcn Textarea Component */}
+                  <Textarea
                     aria-label="Your Solution, Approach, or Code Submission"
                     rows={7}
                     value={studentAnswer}
@@ -305,7 +348,7 @@ export const PracticeView: React.FC = () => {
                       }
                     }}
                     placeholder="Write your explanation or code here (e.g. Initialize two pointers left=0, right=n-1; calculate window sum; expand until condition is satisfied; contract left pointer while maintaining invariant...)"
-                    className="w-full bg-zinc-950/90 border border-white/[0.1] rounded-xl p-3 text-xs text-zinc-100 font-mono focus:outline-none focus:border-white/[0.3] focus:ring-1 focus:ring-white/20 placeholder:text-zinc-600 transition-colors leading-relaxed"
+                    className="w-full bg-zinc-950/90 border border-border/70 rounded-xl p-3 text-xs text-zinc-100 font-mono focus-visible:ring-1 focus-visible:ring-white/30 placeholder:text-zinc-600 transition-colors leading-relaxed min-h-[140px]"
                   />
                   <div className="flex items-center justify-between text-[11px] text-zinc-500 mt-1 px-1">
                     <span>Evaluated on complexity, correctness & clarity</span>
@@ -335,7 +378,7 @@ export const PracticeView: React.FC = () => {
                     size="sm"
                     variant="outline"
                     onClick={() => toggleResourceCompletion(activeDrill.id)}
-                    className="text-xs rounded-full bg-zinc-900/80 border border-white/[0.08] text-zinc-300 hover:text-white"
+                    className="text-xs rounded-full bg-zinc-900/80 border border-border/60 text-zinc-300 hover:text-white"
                   >
                     {completedResourceIds.includes(activeDrill.id)
                       ? '✓ Marked as Completed'
@@ -345,8 +388,8 @@ export const PracticeView: React.FC = () => {
 
                 {/* AI Evaluation Feedback Card */}
                 {evaluationFeedback && (
-                  <div className="p-4 rounded-xl bg-zinc-950 border border-white/[0.12] text-xs space-y-3 mt-4 animate-in fade-in shadow-xl">
-                    <div className="flex items-center justify-between border-b border-white/[0.08] pb-2">
+                  <div className="p-4 rounded-xl bg-zinc-950 border border-border/80 text-xs space-y-3 mt-4 animate-in fade-in shadow-xl">
+                    <div className="flex items-center justify-between border-b border-border/40 pb-2">
                       <span className="font-semibold text-white flex items-center gap-1.5">
                         <Sparkles className="w-3.5 h-3.5 text-white" />
                         Automated Feedback Assessment
@@ -370,7 +413,7 @@ export const PracticeView: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="p-2.5 rounded-lg bg-zinc-900 border border-white/[0.06] text-[11px] text-zinc-400">
+                    <div className="p-2.5 rounded-lg bg-zinc-900 border border-border/40 text-[11px] text-zinc-400">
                       <strong className="text-white">Next Step: </strong>
                       {evaluationFeedback.recommendedNext}
                     </div>
@@ -379,7 +422,7 @@ export const PracticeView: React.FC = () => {
               </CardContent>
             </Card>
           ) : (
-            <div className="p-12 text-center text-xs text-zinc-400 bg-zinc-950/40 rounded-xl border border-white/[0.08]">
+            <div className="p-12 text-center text-xs text-zinc-400 bg-zinc-950/40 rounded-xl border border-border/40">
               Select a practice module on the left to begin.
             </div>
           )}

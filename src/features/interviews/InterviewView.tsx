@@ -10,6 +10,14 @@ import {
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Textarea } from '@/components/ui/textarea'
+import { Progress } from '@/components/ui/progress'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 
 const STAR_QUESTIONS = [
   {
@@ -64,15 +72,15 @@ export const InterviewView: React.FC = () => {
   }
 
   const handleInsertTemplate = () => {
-    const template = `Situation:\nIn my recent team project, we faced...\n\nTask:\nMy specific responsibility was to resolve...\n\nAction:\nI designed a benchmark suite to objectively test both implementations...\n\nResult:\nThe data proved our approach reduced query response time by 42% and saved 12 hours of debugging.\n`
+    const template = "Situation:\nIn my recent team project, we faced...\n\nTask:\nMy specific responsibility was to resolve...\n\nAction:\nI designed a benchmark suite to objectively test both implementations...\n\nResult:\nThe data proved our approach reduced query response time by 42% and saved 12 hours of debugging.\n"
     setResponse(template)
   }
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto pb-12">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border/50">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs font-medium mb-2.5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-border/60 text-zinc-300 text-xs font-medium mb-2.5">
             <MessageSquareCode className="w-3.5 h-3.5 text-white" />
             <span>Behavioral & System Design Lab</span>
           </div>
@@ -93,81 +101,83 @@ export const InterviewView: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left: Questions selector (4 cols) */}
-        <div className="lg:col-span-4 space-y-3">
+        <div className="lg:col-span-4 space-y-4">
           <div className="flex items-center justify-between text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1 px-1">
             <span>High-Frequency Behavioral Prompts</span>
             <span className="font-mono text-[10px] text-zinc-500">{STAR_QUESTIONS.length} Prompts</span>
           </div>
 
-          {STAR_QUESTIONS.map((q, idx) => {
-            const isSelected = activeQ.id === q.id
-            return (
-              <div
-                key={q.id}
-                onClick={() => {
-                  setActiveQ(q)
-                  setEvaluation(null)
-                  setResponse('')
-                }}
-                tabIndex={0}
-                role="button"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
+          <div className="space-y-2.5">
+            {STAR_QUESTIONS.map((q) => {
+              const isSelected = activeQ.id === q.id
+              return (
+                <div
+                  key={q.id}
+                  onClick={() => {
                     setActiveQ(q)
                     setEvaluation(null)
                     setResponse('')
-                  }
-                }}
-                className={`p-3.5 rounded-xl border cursor-pointer transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${
-                  isSelected
-                    ? 'border-white/[0.3] bg-[#12131a] shadow-lg shadow-black/40'
-                    : 'border-white/[0.06] bg-[#0c0d12]/80 hover:border-white/[0.14] hover:bg-[#0f1017]'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-1.5">
-                  <Badge variant="secondary" className="text-[10px] font-mono uppercase bg-zinc-900 text-zinc-300 border-white/[0.06]">
-                    {q.category}
-                  </Badge>
-                  <span className="text-[10px] font-mono text-zinc-500">#{idx + 1}</span>
+                  }}
+                  tabIndex={0}
+                  role="button"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      setActiveQ(q)
+                      setEvaluation(null)
+                      setResponse('')
+                    }
+                  }}
+                  className={`p-3.5 rounded-xl border transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${
+                    isSelected
+                      ? 'border-border/90 bg-[#12131a] shadow-lg shadow-black/40'
+                      : 'border-border/40 bg-[#0c0d12]/80 hover:border-border/80 hover:bg-[#0f1017]'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-[11px] mb-1">
+                    <Badge variant="secondary" className="text-[9px] py-0 px-2 font-mono uppercase bg-zinc-900 text-zinc-300 border-border/40">
+                      {q.category}
+                    </Badge>
+                  </div>
+                  <h4 className="text-xs font-semibold text-white leading-snug">
+                    {q.question}
+                  </h4>
                 </div>
-                <h4 className="text-xs font-semibold text-zinc-100 leading-snug">
-                  {q.question}
-                </h4>
-              </div>
-            )
-          })}
-
-          {/* Familiar STAR Structure Guidance Card */}
-          <div className="p-4 rounded-xl bg-zinc-950/80 border border-white/[0.08] text-xs space-y-2.5 mt-4 shadow-sm">
-            <span className="font-semibold text-white flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-              The STAR Rubric:
-            </span>
-            <ul className="text-zinc-400 space-y-1.5 text-[11px]">
-              <li className="flex items-start gap-1.5">
-                <strong className="text-emerald-400 font-mono">S</strong>
-                <span><strong className="text-zinc-200">Situation:</strong> Set the context & problem (20s)</span>
-              </li>
-              <li className="flex items-start gap-1.5">
-                <strong className="text-cyan-400 font-mono">T</strong>
-                <span><strong className="text-zinc-200">Task:</strong> State the core challenge & goal (15s)</span>
-              </li>
-              <li className="flex items-start gap-1.5">
-                <strong className="text-indigo-400 font-mono">A</strong>
-                <span><strong className="text-zinc-200">Action:</strong> What specific decisions YOU made (60s)</span>
-              </li>
-              <li className="flex items-start gap-1.5">
-                <strong className="text-amber-400 font-mono">R</strong>
-                <span><strong className="text-zinc-200">Result:</strong> Quantifiable business impact (25s)</span>
-              </li>
-            </ul>
+              )
+            })}
           </div>
+
+          {/* Accordion: The STAR Rubric Explanation */}
+          <Card className="border-border/60 bg-zinc-950/80">
+            <CardHeader className="p-4 pb-2">
+              <CardTitle className="text-xs text-white font-semibold flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                The STAR Framework
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 pt-0">
+              <Accordion defaultValue={["item-1"]} className="w-full">
+                <AccordionItem value="item-1" className="border-border/40">
+                  <AccordionTrigger className="text-xs text-zinc-300 hover:text-white py-2">
+                    STAR Dimension Breakdown
+                  </AccordionTrigger>
+                  <AccordionContent className="text-xs text-zinc-400 space-y-2 pt-1">
+                    <div className="space-y-1.5">
+                      <p><strong className="text-emerald-400 font-mono">S - Situation:</strong> Set the context and problem (~20s).</p>
+                      <p><strong className="text-cyan-400 font-mono">T - Task:</strong> State the core challenge and goal (~15s).</p>
+                      <p><strong className="text-indigo-400 font-mono">A - Action:</strong> What specific technical decisions YOU made (~60s).</p>
+                      <p><strong className="text-amber-400 font-mono">R - Result:</strong> Quantifiable business outcome or metrics (~25s).</p>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Right: Mock Evaluation Terminal (8 cols) */}
         <div className="lg:col-span-8 space-y-6">
-          <Card className="border-white/[0.08] bg-[#0c0d12]/90 shadow-2xl backdrop-blur-xl">
-            <CardHeader className="pb-3 border-b border-white/[0.06]">
+          <Card className="border-border/60 bg-[#0c0d12]/90 shadow-2xl backdrop-blur-xl">
+            <CardHeader className="pb-3 border-b border-border/40">
               <div className="flex items-center justify-between">
                 <Badge variant="default" className="text-xs font-mono">
                   {activeQ.category}
@@ -212,7 +222,7 @@ export const InterviewView: React.FC = () => {
                   </div>
                 </div>
 
-                <textarea
+                <Textarea
                   aria-label="Your Answer draft or transcript"
                   rows={8}
                   value={response}
@@ -224,7 +234,7 @@ export const InterviewView: React.FC = () => {
                     }
                   }}
                   placeholder="Structure your answer using STAR: In my 3rd semester project, our team had conflicting views on database schema... I proposed running a benchmark comparing query throughput... We documented the result and aligned..."
-                  className="w-full bg-zinc-950/90 border border-white/[0.1] rounded-xl p-3 text-xs text-zinc-100 font-mono focus:outline-none focus:border-white/[0.3] focus:ring-1 focus:ring-white/20 placeholder:text-zinc-600 transition-colors leading-relaxed"
+                  className="w-full bg-zinc-950/90 border border-border/70 rounded-xl p-3 text-xs text-zinc-100 font-mono focus-visible:ring-1 focus-visible:ring-white/30 placeholder:text-zinc-600 transition-colors leading-relaxed min-h-[160px]"
                 />
 
                 <div className="flex justify-between items-center text-[11px] text-zinc-400 mt-1 px-1">
@@ -249,8 +259,8 @@ export const InterviewView: React.FC = () => {
               </div>
 
               {evaluation && (
-                <div className="p-4 rounded-xl bg-zinc-950 border border-white/[0.12] text-xs space-y-4 mt-4 animate-in fade-in shadow-xl">
-                  <div className="flex items-center justify-between border-b border-white/[0.08] pb-2">
+                <div className="p-4 rounded-xl bg-zinc-950 border border-border/80 text-xs space-y-4 mt-4 animate-in fade-in shadow-xl">
+                  <div className="flex items-center justify-between border-b border-border/40 pb-2">
                     <span className="font-semibold text-white flex items-center gap-1.5">
                       <Sparkles className="w-4 h-4 text-white" />
                       Interviewer Evaluation Feedback
@@ -261,17 +271,20 @@ export const InterviewView: React.FC = () => {
                   </div>
 
                   <div className="grid grid-cols-3 gap-3 text-center">
-                    <div className="p-2.5 rounded-xl bg-zinc-900/80 border border-white/[0.06]">
-                      <span className="text-[10px] text-zinc-400 block mb-0.5">Situation & Task</span>
+                    <div className="p-2.5 rounded-xl bg-zinc-900/80 border border-border/50 space-y-1.5">
+                      <span className="text-[10px] text-zinc-400 block">Situation & Task</span>
                       <span className="text-base font-bold font-mono text-emerald-400">{evaluation.situationScore}%</span>
+                      <Progress value={evaluation.situationScore} indicatorClassName="bg-emerald-400" aria-label="Situation & Task score" />
                     </div>
-                    <div className="p-2.5 rounded-xl bg-zinc-900/80 border border-white/[0.06]">
-                      <span className="text-[10px] text-zinc-400 block mb-0.5">Personal Action</span>
+                    <div className="p-2.5 rounded-xl bg-zinc-900/80 border border-border/50 space-y-1.5">
+                      <span className="text-[10px] text-zinc-400 block">Personal Action</span>
                       <span className="text-base font-bold font-mono text-white">{evaluation.actionScore}%</span>
+                      <Progress value={evaluation.actionScore} indicatorClassName="bg-white" aria-label="Personal Action score" />
                     </div>
-                    <div className="p-2.5 rounded-xl bg-zinc-900/80 border border-white/[0.06]">
-                      <span className="text-[10px] text-zinc-400 block mb-0.5">Quantified Result</span>
+                    <div className="p-2.5 rounded-xl bg-zinc-900/80 border border-border/50 space-y-1.5">
+                      <span className="text-[10px] text-zinc-400 block">Quantified Result</span>
                       <span className="text-base font-bold font-mono text-amber-400">{evaluation.resultScore}%</span>
+                      <Progress value={evaluation.resultScore} indicatorClassName="bg-amber-400" aria-label="Quantified Result score" />
                     </div>
                   </div>
 

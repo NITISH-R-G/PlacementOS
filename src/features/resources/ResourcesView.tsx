@@ -13,6 +13,8 @@ import { INITIAL_RESOURCES } from '@/data/resources'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
 
 const CATEGORY_TAGS = [
   { id: 'all', label: 'All Modules' },
@@ -43,27 +45,27 @@ export const ResourcesView: React.FC = () => {
     switch (diff) {
       case 'Easy':
         return (
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
+          <Badge variant="success" className="text-[10px] font-mono px-2 py-0.5">
             Easy
-          </span>
+          </Badge>
         )
       case 'Medium':
         return (
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-medium">
+          <Badge variant="warning" className="text-[10px] font-mono px-2 py-0.5">
             Medium
-          </span>
+          </Badge>
         )
       case 'Hard':
         return (
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-medium">
+          <Badge variant="destructive" className="text-[10px] font-mono px-2 py-0.5">
             Hard
-          </span>
+          </Badge>
         )
       default:
         return (
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700 font-medium">
+          <Badge variant="secondary" className="text-[10px] font-mono px-2 py-0.5">
             {diff}
-          </span>
+          </Badge>
         )
     }
   }
@@ -71,9 +73,9 @@ export const ResourcesView: React.FC = () => {
   return (
     <div className="space-y-8 max-w-6xl mx-auto pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border/50">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs font-medium mb-2.5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-border/60 text-zinc-300 text-xs font-medium mb-2.5">
             <Library className="w-3.5 h-3.5 text-white" />
             <span>Accredited Knowledge Base</span>
           </div>
@@ -92,7 +94,7 @@ export const ResourcesView: React.FC = () => {
       </div>
 
       {/* Attribution Alert Card */}
-      <div className="p-4 rounded-2xl border border-white/[0.08] bg-zinc-950/80 text-xs text-zinc-300 flex items-start gap-3.5 shadow-sm">
+      <div className="p-4 rounded-2xl border border-border/60 bg-zinc-950/80 text-xs text-zinc-300 flex items-start gap-3.5 shadow-sm">
         <Info className="w-5 h-5 text-white shrink-0 mt-0.5" />
         <div className="space-y-1">
           <strong className="text-white block font-semibold">Open Source Attribution & Compliance:</strong>
@@ -126,20 +128,20 @@ export const ResourcesView: React.FC = () => {
 
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-3" />
-            <input
+            <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-3 z-10" />
+            <Input
               type="text"
               aria-label="Search resources"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search topics, skills (e.g. Sliding Window, Mutex, Normalization)..."
-              className="w-full bg-zinc-950/90 border border-white/[0.1] rounded-xl pl-9 pr-9 py-2.5 text-xs text-white placeholder:text-zinc-600 focus:outline-none focus:border-white/[0.3] focus:ring-1 focus:ring-white/20 transition-colors"
+              className="w-full bg-zinc-950/90 border border-border/60 rounded-xl pl-9 pr-9 py-2.5 text-xs text-white placeholder:text-zinc-600 focus-visible:ring-1 focus-visible:ring-white/20 transition-colors"
             />
             {searchTerm && (
               <button
                 type="button"
                 onClick={() => setSearchTerm('')}
-                className="absolute right-3 top-2.5 p-0.5 rounded text-zinc-400 hover:text-white"
+                className="absolute right-3 top-2.5 p-0.5 rounded text-zinc-400 hover:text-white z-10"
                 title="Clear search"
               >
                 <X className="w-4 h-4" />
@@ -153,7 +155,7 @@ export const ResourcesView: React.FC = () => {
               aria-label="Filter by resource source"
               value={selectedSource}
               onChange={(e) => setSelectedSource(e.target.value)}
-              className="bg-zinc-950/90 border border-white/[0.1] rounded-xl px-4 py-2.5 text-xs text-zinc-200 focus:outline-none focus:border-white/[0.3] focus:ring-1 focus:ring-white/20 transition-colors cursor-pointer"
+              className="bg-zinc-950/90 border border-border/60 rounded-xl px-4 py-2.5 text-xs text-zinc-200 focus:outline-none focus:border-white/[0.3] focus:ring-1 focus:ring-white/20 transition-colors cursor-pointer"
             >
               <option value="all">All Sources</option>
               <option value="Striver A2Z">Striver A2Z</option>
@@ -183,7 +185,7 @@ export const ResourcesView: React.FC = () => {
 
       {/* Resource Grid */}
       {filtered.length === 0 ? (
-        <div className="p-12 text-center border border-dashed border-white/[0.1] rounded-2xl bg-zinc-950/40 space-y-3">
+        <div className="p-12 text-center border border-dashed border-border/60 rounded-2xl bg-zinc-950/40 space-y-3">
           <p className="text-sm font-medium text-zinc-200">No matching learning resources found</p>
           <p className="text-xs text-zinc-400 max-w-sm mx-auto">
             Try adjusting your search keywords or reset the source filter to view accredited placement materials.
@@ -205,12 +207,12 @@ export const ResourcesView: React.FC = () => {
                 className={`border transition-all duration-200 flex flex-col justify-between ${
                   isDone
                     ? 'border-emerald-500/30 bg-[#0c1410]/70'
-                    : 'border-white/[0.06] bg-[#0c0d12]/90 hover:border-white/[0.15] hover:bg-[#0f1017]'
+                    : 'border-border/50 bg-[#0c0d12]/90 hover:border-border/80 hover:bg-[#0f1017]'
                 }`}
               >
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between text-[11px] mb-1.5">
-                    <Badge variant="secondary" className="text-[9px] py-0 px-2 font-mono uppercase bg-zinc-900 text-zinc-300 border-white/[0.06]">
+                    <Badge variant="secondary" className="text-[9px] py-0 px-2 font-mono uppercase bg-zinc-900 text-zinc-300 border-border/40">
                       {res.category.toUpperCase()}
                     </Badge>
                     <div className="flex items-center gap-1.5">
@@ -232,14 +234,16 @@ export const ResourcesView: React.FC = () => {
                     {res.skills.map((s, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-0.5 rounded-md bg-zinc-900/80 border border-white/[0.06] text-[10px] text-zinc-400 font-mono"
+                        className="px-2 py-0.5 rounded-md bg-zinc-900/80 border border-border/40 text-[10px] text-zinc-400 font-mono"
                       >
                         {s}
                       </span>
                     ))}
                   </div>
 
-                  <div className="flex items-center justify-between pt-3 border-t border-white/[0.06] text-xs">
+                  <Separator className="bg-border/40" />
+
+                  <div className="flex items-center justify-between pt-1 text-xs">
                     <span className="text-[11px] text-zinc-400 font-mono">
                       Source: <strong className="text-zinc-200">{res.source}</strong>
                     </span>

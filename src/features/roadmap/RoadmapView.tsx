@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
 import {
   MapPin,
-  CheckCircle2,
   Calendar,
   Sparkles,
-  Circle,
   Clock,
   ArrowRight,
+  ArrowLeft,
 } from 'lucide-react'
 import { usePlacementStore } from '@/store/usePlacementStore'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Progress } from '@/components/ui/progress'
+import { Separator } from '@/components/ui/separator'
 
 export const RoadmapView: React.FC = () => {
   const { profile, recommendationOutput, setActiveTab } = usePlacementStore()
@@ -30,9 +32,9 @@ export const RoadmapView: React.FC = () => {
   return (
     <div className="space-y-8 max-w-5xl mx-auto pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border/50">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs font-medium mb-2.5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-border/60 text-zinc-300 text-xs font-medium mb-2.5">
             <MapPin className="w-3.5 h-3.5 text-white" />
             <span>Target Role: {profile.targetRole.replace('_', ' ').toUpperCase()}</span>
           </div>
@@ -48,17 +50,18 @@ export const RoadmapView: React.FC = () => {
           <Button
             size="sm"
             variant="outline"
-            className="rounded-full bg-zinc-900/90 border border-white/[0.1] text-zinc-300 hover:text-white hover:bg-zinc-800 transition-all text-xs"
+            className="rounded-full bg-zinc-900/90 border-border/60 text-zinc-300 hover:text-white hover:bg-zinc-800 transition-all text-xs"
             onClick={() => setActiveTab('dashboard')}
           >
-            ← Back to Dashboard
+            <ArrowLeft className="w-3.5 h-3.5 mr-1" />
+            Back to Dashboard
           </Button>
         </div>
       </div>
 
       {/* Sprint Overview Summary (Linear Cycles / Project Management convention) */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-xl bg-zinc-950/80 border border-white/[0.08] space-y-1">
+        <div className="p-4 rounded-xl bg-zinc-950/80 border border-border/60 space-y-1">
           <span className="text-[11px] text-zinc-400 font-medium uppercase tracking-wider block">Current Sprint</span>
           <div className="text-sm font-bold text-white flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -67,7 +70,7 @@ export const RoadmapView: React.FC = () => {
           <span className="text-[11px] text-zinc-500 font-mono">Days 1 - 30 of {profile.daysUntilPlacement}</span>
         </div>
 
-        <div className="p-4 rounded-xl bg-zinc-950/80 border border-white/[0.08] space-y-1">
+        <div className="p-4 rounded-xl bg-zinc-950/80 border border-border/60 space-y-1">
           <span className="text-[11px] text-zinc-400 font-medium uppercase tracking-wider block">Daily Target</span>
           <div className="text-sm font-bold text-white flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5 text-zinc-400" />
@@ -76,7 +79,7 @@ export const RoadmapView: React.FC = () => {
           <span className="text-[11px] text-zinc-500 font-mono">Continuous Engine Calibration</span>
         </div>
 
-        <div className="p-4 rounded-xl bg-zinc-950/80 border border-white/[0.08] space-y-1">
+        <div className="p-4 rounded-xl bg-zinc-950/80 border border-border/60 space-y-1">
           <span className="text-[11px] text-zinc-400 font-medium uppercase tracking-wider block">Total Milestone Tasks</span>
           <div className="text-sm font-bold text-white">
             {roadmap.reduce((acc, p) => acc + p.tasks.length, 0)} Engineering Tasks
@@ -89,14 +92,15 @@ export const RoadmapView: React.FC = () => {
       <div className="space-y-6 relative">
         {roadmap.map((phase) => {
           const completedCount = phase.tasks.filter((t) => localCompletedTasks[t.id] ?? t.completed).length
+          const phaseProgress = Math.round((completedCount / phase.tasks.length) * 100)
 
           return (
             <Card
               key={phase.id}
               className={`border transition-all duration-300 ${
                 phase.isCurrent
-                  ? 'border-white/[0.25] bg-[#0d0e14]/95 shadow-[0_0_30px_-10px_rgba(255,255,255,0.08)]'
-                  : 'border-white/[0.06] bg-[#0c0d12]/70 hover:border-white/[0.12]'
+                  ? 'border-border/90 bg-[#0d0e14]/95 shadow-[0_0_30px_-10px_rgba(255,255,255,0.08)]'
+                  : 'border-border/40 bg-[#0c0d12]/70 hover:border-border/80'
               }`}
             >
               <CardHeader className="pb-3">
@@ -106,7 +110,7 @@ export const RoadmapView: React.FC = () => {
                       className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs tracking-wider transition-colors ${
                         phase.isCurrent
                           ? 'bg-white text-black shadow-lg shadow-white/10'
-                          : 'bg-zinc-900 border border-white/[0.08] text-zinc-400'
+                          : 'bg-zinc-900 border border-border/60 text-zinc-400'
                       }`}
                     >
                       P{phase.phaseNumber}
@@ -122,7 +126,7 @@ export const RoadmapView: React.FC = () => {
                             Current Sprint
                           </Badge>
                         ) : (
-                          <Badge variant="outline" className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full text-zinc-400 border-white/[0.06]">
+                          <Badge variant="outline" className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full text-zinc-400 border-border/50">
                             Planned
                           </Badge>
                         )}
@@ -139,7 +143,7 @@ export const RoadmapView: React.FC = () => {
                       <Badge
                         key={area}
                         variant="secondary"
-                        className="text-[10px] uppercase font-mono bg-zinc-900/90 text-zinc-300 border-white/[0.06] px-2 py-0.5"
+                        className="text-[10px] uppercase font-mono bg-zinc-900/90 text-zinc-300 border-border/40 px-2 py-0.5"
                       >
                         {area.replace('_', ' ')}
                       </Badge>
@@ -152,8 +156,19 @@ export const RoadmapView: React.FC = () => {
                   {phase.description}
                 </p>
 
+                {/* Progress meter per phase */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between text-xs text-zinc-400">
+                    <span>Phase Completion</span>
+                    <span className="font-mono">{phaseProgress}%</span>
+                  </div>
+                  <Progress value={phaseProgress} aria-label={`${phase.phaseTitle} progress`} />
+                </div>
+
+                <Separator className="bg-border/40" />
+
                 {/* Milestone Deliverable Tasks */}
-                <div className="space-y-2.5 pt-3 border-t border-white/[0.06]">
+                <div className="space-y-2.5 pt-1">
                   <div className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider flex items-center justify-between">
                     <span>Milestone Deliverables:</span>
                     <span className="font-mono text-[10px] text-zinc-400">
@@ -179,16 +194,16 @@ export const RoadmapView: React.FC = () => {
                           }}
                           className={`p-3 rounded-xl border text-xs flex items-center justify-between transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${
                             isTaskDone
-                              ? 'bg-zinc-950/40 border-white/[0.04]'
-                              : 'bg-zinc-900/60 border-white/[0.08] hover:border-white/[0.16] hover:bg-zinc-900/90'
+                              ? 'bg-zinc-950/40 border-border/30 opacity-70'
+                              : 'bg-zinc-900/60 border-border/50 hover:border-white/20 hover:bg-zinc-900/90'
                           }`}
                         >
                           <div className="flex items-center gap-2.5">
-                            {isTaskDone ? (
-                              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                            ) : (
-                              <Circle className="w-4 h-4 text-zinc-600 shrink-0" />
-                            )}
+                            <Checkbox
+                              checked={isTaskDone}
+                              onCheckedChange={() => toggleTask(task.id)}
+                              aria-label={`Mark task ${task.title}`}
+                            />
                             <span className={isTaskDone ? 'line-through text-zinc-500' : 'text-zinc-200 font-medium'}>
                               {task.title}
                             </span>

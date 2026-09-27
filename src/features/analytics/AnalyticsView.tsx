@@ -6,6 +6,7 @@ import {
   BarChart3,
   Flame,
   Lightbulb,
+  Check,
 } from 'lucide-react'
 import {
   BarChart,
@@ -19,6 +20,10 @@ import {
 } from 'recharts'
 import { usePlacementStore } from '@/store/usePlacementStore'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Progress } from '@/components/ui/progress'
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
+import { Separator } from '@/components/ui/separator'
 import { SkillDimensionKey } from '@/types'
 
 export const AnalyticsView: React.FC = () => {
@@ -40,11 +45,13 @@ export const AnalyticsView: React.FC = () => {
   return (
     <div className="space-y-8 max-w-5xl mx-auto pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs font-medium mb-2.5">
-            <BarChart3 className="w-3.5 h-3.5 text-white" />
-            <span>Placement Telemetry & Insights</span>
+          <div className="inline-flex items-center gap-2 mb-2.5">
+            <Badge variant="outline" className="px-3 py-1 text-xs gap-1.5 font-medium border-white/[0.1] bg-white/[0.03] text-zinc-300">
+              <BarChart3 className="w-3.5 h-3.5 text-white" />
+              <span>Placement Telemetry & Insights</span>
+            </Badge>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2.5">
             Preparation Analytics & Readiness Velocity
@@ -54,8 +61,9 @@ export const AnalyticsView: React.FC = () => {
           </p>
         </div>
       </div>
+      <Separator className="bg-white/[0.08]" />
 
-      {/* 4 Stat Cards (Stripe / Vercel Metric pattern) */}
+      {/* 4 Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="border-white/[0.08] bg-[#0c0d12]/90 shadow-xl backdrop-blur-xl">
           <CardContent className="p-5 space-y-1.5">
@@ -114,7 +122,7 @@ export const AnalyticsView: React.FC = () => {
                 Normalized readiness index (0 - 100) evaluated against target role standards.
               </CardDescription>
             </div>
-            {/* Visual Threshold Legend (Familiar BI / Dashboard convention) */}
+            {/* Visual Threshold Legend */}
             <div className="flex items-center gap-3 text-[11px] text-zinc-400 font-mono">
               <div className="flex items-center gap-1">
                 <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500" />
@@ -188,7 +196,40 @@ export const AnalyticsView: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* Weekly Consistency Visualizer (GitHub / Duolingo heatmap convention) */}
+      {/* Dimensional Metric Meters (using shadcn Progress & Badges) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {(Object.keys(readinessProfile) as SkillDimensionKey[]).map((key) => {
+          const dim = readinessProfile[key]
+          const isHigh = dim.score >= 70
+          const isMid = dim.score >= 45 && dim.score < 70
+          return (
+            <Card key={key} className="border-white/[0.08] bg-[#0c0d12]/90 shadow-sm backdrop-blur-xl">
+              <CardContent className="p-4 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-white">{dim.label}</span>
+                  </div>
+                  <Badge
+                    variant={isHigh ? 'success' : isMid ? 'secondary' : 'destructive'}
+                    className="text-[11px] font-mono px-2 py-0.5"
+                  >
+                    {dim.score}%
+                  </Badge>
+                </div>
+                <Progress value={dim.score} aria-label={`${dim.label} mastery`} className="h-2 bg-zinc-900" />
+                <div className="flex items-center justify-between text-[11px] text-zinc-400">
+                  <span>Weight: High</span>
+                  <span className={isHigh ? 'text-emerald-400' : isMid ? 'text-zinc-300' : 'text-rose-400'}>
+                    {isHigh ? 'Optimal proficiency' : isMid ? 'Approaching benchmark' : 'Requires dedicated drill'}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+          )
+        })}
+      </div>
+
+      {/* Weekly Consistency Visualizer */}
       <Card className="border-white/[0.08] bg-[#0c0d12]/90 shadow-xl backdrop-blur-xl">
         <CardHeader>
           <CardTitle className="text-base text-white font-bold tracking-tight">Weekly Consistency Heatmap</CardTitle>
@@ -210,7 +251,7 @@ export const AnalyticsView: React.FC = () => {
                         : 'border-white/[0.04] bg-zinc-950/40 text-zinc-600'
                     }`}
                   >
-                    {isActive ? '✓' : '-'}
+                    {isActive ? <Check className="w-4 h-4 text-emerald-400" /> : '-'}
                   </div>
                 </div>
               )
@@ -219,18 +260,18 @@ export const AnalyticsView: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* Actionable Engineering Insights Card */}
-      <div className="p-4 rounded-2xl border border-white/[0.08] bg-zinc-950/80 text-xs text-zinc-300 flex items-start gap-3.5 shadow-sm">
-        <Lightbulb className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-        <div className="space-y-1">
-          <strong className="text-white block font-semibold">Engine Telemetry Insights:</strong>
-          <ul className="text-zinc-400 space-y-1 text-[11px] list-disc list-inside">
+      {/* Actionable Engineering Insights using shadcn Alert */}
+      <Alert className="border-white/[0.08] bg-zinc-950/80 shadow-md">
+        <Lightbulb className="w-5 h-5 text-amber-400" />
+        <AlertTitle className="text-white font-semibold text-sm">Engine Telemetry Insights</AlertTitle>
+        <AlertDescription className="text-zinc-400 text-xs mt-1.5">
+          <ul className="space-y-1.5 text-[11px] list-disc list-inside">
             <li><strong className="text-zinc-200">Velocity:</strong> Current trajectory projects an 85% composite score before Day 45.</li>
             <li><strong className="text-zinc-200">Focus Recommendation:</strong> Prioritize 2 relational schema normalization drills this week to boost database score.</li>
             <li><strong className="text-zinc-200">Cadence:</strong> Maintaining your {streakDays}-day streak satisfies the consistency threshold for top-tier campus recruitment drives.</li>
           </ul>
-        </div>
-      </div>
+        </AlertDescription>
+      </Alert>
     </div>
   )
 }

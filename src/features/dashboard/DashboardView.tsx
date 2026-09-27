@@ -3,11 +3,8 @@ import {
   Sparkles,
   TrendingUp,
   Clock,
-  CheckCircle2,
   AlertTriangle,
   Flame,
-  Target,
-  Circle,
   ArrowRight,
 } from 'lucide-react'
 import { usePlacementStore } from '@/store/usePlacementStore'
@@ -15,6 +12,9 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
+import { Separator } from '@/components/ui/separator'
 import { SkillDimensionKey } from '@/types'
 
 export const DashboardView: React.FC = () => {
@@ -22,7 +22,6 @@ export const DashboardView: React.FC = () => {
     profile,
     recommendationOutput,
     streakDays,
-    totalHoursStudied,
     completedResourceIds,
     toggleTodayAction,
     toggleResourceCompletion,
@@ -45,11 +44,12 @@ export const DashboardView: React.FC = () => {
 
   // Active roadmap phase
   const currentPhase = roadmap.find((p) => p.isCurrent) || roadmap[0]
+  const planActions = todayPlan?.actions || []
 
   return (
     <div className="space-y-8 pb-12">
-      {/* 1. Header Greeting & Countdown Bar (Where am I? / Jakob's Law Dashboard convention) */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
+      {/* 1. Header Greeting & Countdown Bar */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-border/50">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
@@ -66,7 +66,7 @@ export const DashboardView: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="px-4 py-2 rounded-xl bg-zinc-900/90 border border-white/[0.08] text-right shadow-sm">
+          <div className="px-4 py-2 rounded-xl bg-zinc-900/90 border border-border/60 text-right shadow-sm">
             <div className="text-xs text-zinc-400 font-medium">Placement Countdown</div>
             <div className="text-lg font-bold font-mono text-white flex items-center gap-1.5 justify-end">
               <Clock className="w-4 h-4 text-zinc-400" />
@@ -83,8 +83,8 @@ export const DashboardView: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. Hero: Overall Placement Readiness & "What Matters Now" (What is my current status? What matters most?) */}
-      <Card variant="action" className="border-white/[0.12] bg-gradient-to-br from-zinc-950 via-[#0a0a0f] to-black relative overflow-hidden shadow-2xl">
+      {/* 2. Hero: Overall Placement Readiness & "What Matters Now" */}
+      <Card variant="action" className="border-border/70 bg-gradient-to-br from-zinc-950 via-[#0a0a0f] to-black relative overflow-hidden shadow-2xl">
         <div className="absolute right-0 top-0 w-96 h-96 bg-white/[0.03] rounded-full blur-3xl pointer-events-none -z-0" />
         <CardContent className="p-6 sm:p-8 space-y-6 relative z-10">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
@@ -96,16 +96,18 @@ export const DashboardView: React.FC = () => {
               <h2 className="text-xl sm:text-2xl font-bold text-white leading-snug">
                 Overall Placement Readiness Score
               </h2>
-              <div className="p-4 rounded-xl bg-zinc-900/90 border border-white/[0.08] text-xs sm:text-sm text-zinc-300 leading-relaxed shadow-inner">
-                <strong className="text-white font-semibold uppercase tracking-wider block text-[11px] mb-1">
+              <Alert className="border-border/60 bg-zinc-900/90 text-zinc-300">
+                <AlertTitle className="text-white font-semibold uppercase tracking-wider text-[11px] mb-1">
                   What Matters Now:
-                </strong>
-                {whatMattersNow}
-              </div>
+                </AlertTitle>
+                <AlertDescription className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
+                  {whatMattersNow}
+                </AlertDescription>
+              </Alert>
             </div>
 
-            {/* Circular / Radial Score Stat Box */}
-            <div className="flex sm:flex-col items-center justify-center p-6 rounded-2xl bg-black/90 border border-white/[0.12] min-w-[200px] text-center shadow-2xl">
+            {/* Score Stat Box */}
+            <div className="flex sm:flex-col items-center justify-center p-6 rounded-2xl bg-black/90 border border-border/80 min-w-[200px] text-center shadow-2xl">
               <div className="text-5xl font-black font-mono tracking-tight text-white mb-1">
                 {overallScore}%
               </div>
@@ -119,122 +121,135 @@ export const DashboardView: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Stats Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-white/[0.08] text-xs">
-            <div>
-              <span className="text-zinc-400 block mb-0.5">Hours Studied</span>
-              <span className="text-base font-bold font-mono text-white">{totalHoursStudied}h</span>
+          <Separator className="bg-border/60" />
+
+          {/* Quick Metrics Strip */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+            <div className="p-3 rounded-lg bg-zinc-900/60 border border-border/40">
+              <div className="text-zinc-400 text-xs font-medium">Completed Drills</div>
+              <div className="text-lg font-bold text-white font-mono mt-0.5">
+                {completedResourceIds.length} Modules
+              </div>
             </div>
-            <div>
-              <span className="text-zinc-400 block mb-0.5">Completed Drills</span>
-              <span className="text-base font-bold font-mono text-white">{completedResourceIds.length} topics</span>
+            <div className="p-3 rounded-lg bg-zinc-900/60 border border-border/40">
+              <div className="text-zinc-400 text-xs font-medium">Identified Gaps</div>
+              <div className="text-lg font-bold text-rose-400 font-mono mt-0.5">
+                {skillGaps.length} Critical
+              </div>
             </div>
-            <div>
-              <span className="text-zinc-400 block mb-0.5">Current Phase</span>
-              <span className="text-base font-semibold text-white">Phase {currentPhase.phaseNumber}</span>
+            <div className="p-3 rounded-lg bg-zinc-900/60 border border-border/40">
+              <div className="text-zinc-400 text-xs font-medium">Target Role Fit</div>
+              <div className="text-lg font-bold text-emerald-400 font-mono mt-0.5">
+                {overallScore >= 70 ? 'On Track' : 'Needs Focus'}
+              </div>
             </div>
-            <div>
-              <span className="text-zinc-400 block mb-0.5">Daily Budget</span>
-              <span className="text-base font-bold font-mono text-white">{profile.availableHoursPerDay}h / day</span>
+            <div className="p-3 rounded-lg bg-zinc-900/60 border border-border/40">
+              <div className="text-zinc-400 text-xs font-medium">Active Roadmap Phase</div>
+              <div className="text-lg font-bold text-white font-mono mt-0.5">
+                Phase {currentPhase.phaseNumber} of {roadmap.length}
+              </div>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* 3. Main Two-Column Layout: "Today's Plan" (Left) & "Top Weakness Gaps" (Right) */}
+      {/* 3. Main Dashboard Grid: Left: Plan & Actions | Right: Skill Gaps & Radar */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Today's Recommended Plan (What should I do next? - 7 cols) */}
         <div className="lg:col-span-7 space-y-6">
-          <Card className="border-white/[0.08] bg-[#0c0d12]/90">
-            <CardHeader className="pb-3 border-b border-white/[0.06]">
+          <Card className="border-border/60 bg-[#0c0d12]/90">
+            <CardHeader className="pb-3 border-b border-border/40">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-white">
-                    <Target className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-base text-white">Today's Recommended Plan</CardTitle>
-                    <CardDescription className="text-xs">
-                      Engine allocated {todayPlan.totalEstimatedMinutes} mins of your {todayPlan.availableMinutes} min budget.
-                    </CardDescription>
-                  </div>
+                <div>
+                  <CardTitle className="text-lg text-white">Today's Recommended Plan</CardTitle>
+                  <CardDescription className="text-xs">
+                    Prioritized daily actions derived deterministically from your weakest dimensions.
+                  </CardDescription>
                 </div>
-
-                <Badge variant="secondary" className="font-mono text-[11px] bg-zinc-900 border-white/[0.08] text-zinc-300">
-                  {todayPlan.actions.filter((a) => todayPlan.completedActionIds?.includes(a.id) || a.isCompleted).length} / {todayPlan.actions.length} Done
+                <Badge variant="outline" className="text-xs font-mono">
+                  {planActions.filter((a) => a.isCompleted).length} / {planActions.length} Done
                 </Badge>
               </div>
             </CardHeader>
             <CardContent className="space-y-3 pt-4">
-              {todayPlan.actions.length === 0 ? (
-                <div className="p-8 text-center text-xs text-zinc-400">
-                  No active actions for today. Run your diagnostic assessment to generate calibrated drills.
-                </div>
-              ) : (
-                todayPlan.actions.map((action) => {
-                  const isDone = todayPlan.completedActionIds?.includes(action.id) || !!action.isCompleted
-                  return (
-                    <div
-                      key={action.id}
-                      className={`p-3.5 rounded-xl border transition-all ${
-                        isDone
-                          ? 'border-emerald-500/20 bg-emerald-950/10'
-                          : 'border-white/[0.08] bg-zinc-900/40 hover:border-white/[0.14]'
-                      }`}
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex items-start gap-3">
-                          <button
-                            onClick={() => toggleTodayAction(action.id)}
-                            className="mt-0.5 text-zinc-500 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40 rounded"
-                            title={isDone ? 'Mark as incomplete' : 'Mark as completed'}
-                          >
-                            {isDone ? (
-                              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                            ) : (
-                              <Circle className="w-4 h-4 text-zinc-600 hover:text-zinc-400" />
-                            )}
-                          </button>
-                          <div className="space-y-1">
-                            <span
-                              className={`text-xs font-semibold block leading-tight ${
-                                isDone ? 'line-through text-zinc-400' : 'text-zinc-100'
-                              }`}
-                            >
-                              {action.title}
-                            </span>
-                            <div className="flex items-center gap-2 text-[11px] text-zinc-400">
-                              <span className="font-mono">{action.estimatedMinutes} mins</span>
-                              <span>•</span>
-                              <span className="capitalize">{action.dimension ? action.dimension.replace('_', ' ') : 'Practice'}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <Button
-                            size="sm"
-                            variant={isDone ? 'outline' : 'default'}
-                            onClick={() => {
-                              toggleTodayAction(action.id)
-                              if (!isDone) setActiveTab('practice')
-                            }}
-                            className="text-xs h-8 rounded-full px-3.5"
-                          >
-                            {isDone ? 'Completed' : 'Start'}
-                          </Button>
-                        </div>
+              {planActions.map((act) => (
+                <div
+                  key={act.id}
+                  onClick={() => toggleTodayAction(act.id)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      toggleTodayAction(act.id)
+                    }
+                  }}
+                  className={`p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-3.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${
+                    act.isCompleted
+                      ? 'bg-zinc-950/40 border-border/30 opacity-60'
+                      : 'bg-zinc-900/70 border-border/60 hover:border-white/20 hover:bg-zinc-900/90'
+                  }`}
+                >
+                  <Checkbox
+                    checked={act.isCompleted}
+                    onCheckedChange={() => toggleTodayAction(act.id)}
+                    className="mt-0.5"
+                    aria-label={`Toggle task: ${act.title}`}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <span
+                        className={`font-semibold text-sm ${
+                          act.isCompleted ? 'line-through text-zinc-400' : 'text-zinc-100'
+                        }`}
+                      >
+                        {act.title}
+                      </span>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <span className="text-[11px] text-zinc-400 font-mono">
+                          ~{act.estimatedMinutes}m
+                        </span>
+                        <Badge
+                          variant={
+                            act.priority === 'high'
+                              ? 'destructive'
+                              : act.priority === 'medium'
+                              ? 'warning'
+                              : 'secondary'
+                          }
+                          className="text-[10px] uppercase font-mono px-1.5 py-0"
+                        >
+                          {act.priority}
+                        </Badge>
                       </div>
                     </div>
-                  )
-                })
-              )}
+                    <p className="text-xs text-zinc-400 mt-1 leading-relaxed">{act.rationale}</p>
+                    <div className="flex items-center justify-between gap-2 mt-3">
+                      <Badge variant="outline" className="text-[10px] text-zinc-400 font-mono">
+                        {act.dimension ? act.dimension.replace('_', ' ') : 'Practice'}
+                      </Badge>
+                      <Button
+                        size="sm"
+                        variant={act.isCompleted ? 'outline' : 'default'}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toggleTodayAction(act.id)
+                          if (!act.isCompleted) setActiveTab('practice')
+                        }}
+                        className="text-xs h-7 rounded-full px-3.5"
+                      >
+                        {act.isCompleted ? 'Completed' : 'Start'}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </CardContent>
           </Card>
 
-          {/* Current Roadmap Milestone Snapshot */}
-          <Card className="border-white/[0.08] bg-[#0c0d12]/90">
-            <CardHeader className="pb-3 border-b border-white/[0.06]">
+          {/* Active Roadmap Phase Preview */}
+          <Card className="border-border/60 bg-[#0c0d12]/90">
+            <CardHeader className="pb-3 border-b border-border/40">
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-base text-white">Active Roadmap Phase</CardTitle>
@@ -261,7 +276,7 @@ export const DashboardView: React.FC = () => {
                 {currentPhase.tasks.map((task) => (
                   <div
                     key={task.id}
-                    className="p-2.5 rounded-lg bg-zinc-900/60 border border-white/[0.06] text-xs flex items-center justify-between"
+                    className="p-2.5 rounded-lg bg-zinc-900/60 border border-border/40 text-xs flex items-center justify-between"
                   >
                     <div className="flex items-center gap-2">
                       <div className="w-1.5 h-1.5 rounded-full bg-white" />
@@ -277,11 +292,11 @@ export const DashboardView: React.FC = () => {
           </Card>
         </div>
 
-        {/* Right Column: Skill Gaps & Readiness Matrix (What requires attention? - 5 cols) */}
+        {/* Right Column: Skill Gaps & Readiness Matrix (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
           {/* Top 3 Skill Gaps */}
-          <Card className="border-white/[0.08] bg-[#0c0d12]/90">
-            <CardHeader className="pb-3 border-b border-white/[0.06]">
+          <Card className="border-border/60 bg-[#0c0d12]/90">
+            <CardHeader className="pb-3 border-b border-border/40">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-7 h-7 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
@@ -334,8 +349,8 @@ export const DashboardView: React.FC = () => {
           </Card>
 
           {/* 10-Dimension Readiness Matrix Progress Bars */}
-          <Card className="border-white/[0.08] bg-[#0c0d12]/90">
-            <CardHeader className="pb-3 border-b border-white/[0.06]">
+          <Card className="border-border/60 bg-[#0c0d12]/90">
+            <CardHeader className="pb-3 border-b border-border/40">
               <CardTitle className="text-base text-white">Dimensional Competency Matrix</CardTitle>
               <CardDescription className="text-xs">
                 Empirical readiness calculated across 10 engineering pillars.
@@ -385,8 +400,8 @@ export const DashboardView: React.FC = () => {
         </div>
       </div>
 
-      {/* 4. Quick Actions Row (Where can I inspect deeper? - Jakob's Law convention) */}
-      <div className="p-4 rounded-xl border border-white/[0.08] bg-zinc-950/90 flex flex-col sm:flex-row items-center justify-between gap-4">
+      {/* 4. Quick Actions Row */}
+      <div className="p-4 rounded-xl border border-border/60 bg-zinc-950/90 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <h4 className="text-sm font-semibold text-white">Continue Deliberate Practice</h4>
           <p className="text-xs text-zinc-400">
